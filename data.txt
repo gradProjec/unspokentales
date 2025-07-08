@@ -186,9 +186,9 @@
             {
                 id: 'project8',
                 name: 'Comic Book',
-                imageUrl: './assets/comic-book/cover.png', // A placeholder image for the 3D display
+                imageUrl: './assets/comic-book/cover.jpg', // A placeholder image for the 3D display
                 // Changed to Google Docs Viewer URL for reliable embedding
-                pdfUrl: 'https://drive.google.com/uc?export=download&id=1woUF9q501xix0N0RHzXSB9tRiWk5BIZ5',
+                pdfUrl: 'https://drive.google.com/uc?export=download&id=1jgWSo0MUfRA90aC36EXjKree1adZezUj',
                 description: 'This project demonstrates an interactive PDF viewer, designed to display document pages clearly. Users can navigate through the document using intuitive controls.',
                 additionalImages: [] // No additional images for PDF projects typically
             }

@@ -207,83 +207,6 @@
         #project-detail-additional-images > :last-child {
             margin-bottom: 0;
         }
-
-        /* PDF Viewer Specific Styles (Using iframe) */
-        #pdf-viewer-container {
-            width: 100%;
-            max-width: 900px; /* Max width for the PDF viewer */
-            height: 80vh; /* Fixed height for the iframe container */
-            margin: 40px auto; /* Center the container with vertical margin */
-            display: flex; /* Overridden by .hidden when not active */
-            flex-direction: column;
-            align-items: center;
-            background-color: #2a2a2a; /* Dark background for the viewer */
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4); /* Glowing shadow */
-            box-sizing: border-box;
-            position: relative; /* For loading message positioning */
-        }
-
-        #pdf-viewer-iframe {
-            width: 100%;
-            height: 100%;
-            border: none; /* No default iframe border */
-            border-radius: 8px;
-            background-color: white; /* Background for the PDF area */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Shadow for the PDF */
-        }
-
-        #pdf-loading-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 1.5em;
-            text-align: center;
-            z-index: 2; /* Above iframe if it's slow to load */
-        }
-
-        #pdf-fallback-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.2em;
-            text-align: center;
-            border-radius: 15px; /* Match parent container */
-            z-index: 3; /* Above iframe and loading message */
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        #pdf-fallback-container a {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            text-decoration: none; /* Remove underline from link */
-            margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        }
-
-        #pdf-fallback-container a:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
     </style>
 </head>
 <body>
@@ -301,26 +224,20 @@
     <div id="project-detail-overlay">
         <button id="overlay-close-button">&times;</button>
         <div id="project-detail-content">
-            <!-- Standard Project Details (Image, Description, Additional Images, Link) -->
-            <div id="standard-project-details">
-                <img id="project-detail-main-image" src="" alt="Project Main Image">
-                <div id="project-content-body">
-                    <h2 id="project-detail-title"></h2>
-                    <div id="project-detail-description"></div>
-                    <div id="project-detail-additional-images"></div>
-                    <!-- Project Link -->
-                    <div class="text-center mt-8">
-                        <a id="project-detail-link" href="#" target="_blank" class="text-blue-400 hover:underline text-lg font-semibold">
-                            Click here to learn more
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <!-- Hero Image Section -->
+            <img id="project-detail-main-image" src="" alt="Project Main Image">
 
-            <!-- PDF Viewer Container (Using iframe) -->
-            <div id="pdf-viewer-container" class="hidden">
-                <p id="pdf-loading-message">Loading PDF...</p>
-                <!-- The iframe will be dynamically added here by JavaScript -->
+            <!-- Scrollable Content Body -->
+            <div id="project-content-body">
+                <h2 id="project-detail-title"></h2>
+                <div id="project-detail-description"></div>
+                <div id="project-detail-additional-images"></div>
+                <!-- Project Link -->
+                <div class="text-center mt-8">
+                    <a id="project-detail-link" href="#" target="_blank" class="text-blue-400 hover:underline text-lg font-semibold">
+                        Click here to learn more
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -349,7 +266,7 @@
         // For 'name' and 'description', you can use <br> for new lines.
         // For 'additionalImages', use a string for full-width images,
         // and an array of strings for images you want in a row.
-        // For PDF projects, add a 'pdfUrl' field.
+
 
 
                 const projectData = [
@@ -358,7 +275,7 @@
                 name: 'UNSPOKEN TALES <br> Emotional Limbo',
                 // img here
                 imageUrl: './assets/Main-story/1-and-main-shot-min.png', // Larger image for hero section
-                pageUrl: 'https://www.example.com/project1', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/Phe2N3MhDdvtSqfZ38QoAh', // Example URL
                 description: 'This project, rooted in Constructivist Grounded Theory and existential phenomenology, explores how architectural spaces embody emotion, story, and memory, particularly within the context of Myanmar’s civil conflict. <br> Through in-depth interviews with eleven survivors, personal testimonies are transformed into spatial narratives. <br> The core inquiry revolves around visually communicating these survivor stories, interpreting the interplay of narrative, space, and emotion, and ultimately turning spaces into stories through visual communication. <br> Drawings inspired from influential architects and theorists, used by exaggerated geometry, strong linework, and color to visually express powerful emotions like dread, despair, and resistance. <br> As each becomes an immersive, fictitious world, turning personal narratives into spatial acts that challenge viewers’ perceptions and ethics. <br> Ultimately, it is about creating emotional realities through drawing and architecture, using Myanmar as a poignant case study to confront silence and normalized cruelty. <br> However, this project does not seek to produce a buildable structure, but rather to explore architecture as a medium for expressing psychological rupture. Through drawings, trauma is translated into spatial language using architectural fragments as emotional metaphors. As it is rooted in introspection and memory deconstruction, as it maps real wartime experiences in Myanmar not as literal scenes, but as emotional landscapes.',
                 additionalImages: [
                     // img here
@@ -382,7 +299,7 @@
                 name: 'I. LOST',
                 // img here
                 imageUrl: './assets/Local-1/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project2', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/SRYzaeLvvrwYLPggbpk2ZS', // Example URL
                 description: 'Lost is a spatial fiction that drifts between a father’s fractured memories and a boy’s relentless search for safety in a forest that never quite ends. The drawing stages this disoriented journey as an abstract terrain of interwoven stairs, vertical slivers of local trees, and suspended red voids that hover like unspoken threats. <br> This maze is not merely a forest; it is a mental landscape carved by grief and survival. Each stairway proposes a choice: some lead to exposed crimson spaces; blatant, watchful, unsafe. Others break mid-flight, severing the promise of escape. Only one hidden path threads the boy’s desperate movements to a concealed chamber: a slaughterhouse nested at the forest’s dense core. <br> Vertical elements stretch like scar tissue; trees reborn as pillars of loss; holding up red pockets of slaughtered memory. Nets and wire-like strands weave through this forest, a subjective circuitry binding grief to place, tracing trauma’s impossibility to resolve. These wires are not just structural; they are veins of remembrance; fragile connections that tie the father’s vanished sons to the boy’s flickering hope of reunion. <br> Inside this unstable terrain, the drawing becomes both shelter and trap; a cruel sanctuary of paths looping back to the violence they try to escape. The turquoise, green, fuchsia, and red bleed into each other, mirroring the unresolved tension between finding safety and stumbling upon horror.<br> This methodology layers iterative fragmentation and spatial folding, dissecting real routes and imagined wanderings into a fractured 3D scaffold. Stairway assemblages act as lines of decision; some lead to exposed voids of grief, others dissolve into nowhere. Wire tensions weave through the spaces like veins of unspoken trauma, binding the fragments together.',
                 additionalImages: [
                     [
@@ -408,7 +325,7 @@
                 name: 'II. EXPLOSION',
                 // img here
                 imageUrl: './assets/Local-2/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project3', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/Jpgt2jjkDzoyEPAgUUJ67E', // Example URL
                 description: 'This story revolves around two brothers, Showife and Mohammadul, who lived in a tight-knit Rohingya family under siege by the military. When soldiers came to capture Showife, he hid in the upper floor, hoping to protect his family. Instead, the military raided the house, assaulting the women and killing the men. Showife, frozen by fear, abandoned his wounded brother. As he fled, the betrayal and horror splintered his mind, his guilt an endless loop. <br> Lines, stairs, slabs, and nets are exploded, distorted, and scattered markers of loss, fear, and fragmentation. This drawing visualizes a moment in which a man lost his family, during a military raid, believing they were safe in their wooden home whilst he is hiding in the upper floor. I depict not the event itself, but the emotional implosion that followed—a home bursting outward from within, collapsing under the weight of helplessness. <br> The drawing is composed of overlapping fragments—architectural elements like stairs, sections of walls, and floor slabs, assembled in a chaotic yet intentional manner. Using projection lines from traditional architectural methods like plans and sections, but distorts and collides them to break away from conventional ways of representing space. The drawing is anchored on a radial grid with angular coordinates, referencing compass directions, symbolizing disorientation or mental mapping. Rather than illustrating a real building, this is an introspective process. The approach follows Constructivist ideas, favoring process, deconstruction, and personal narrative over functionality or realism. The drawing is a mapping narrative tool, each layer or projection line representing different timeframes, memories, or emotional states. <br> This methodology explodes architectural conventions into fractured layers of disorientation and grief.',
                 additionalImages: [
                     [
@@ -438,7 +355,7 @@
                 name: 'III. DAY DREAMING',
                 // img here
                 imageUrl: './assets/Local-3/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project4', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/TZoKt1XuZjUjDjCZ6Yh3N3', // Example URL
                 description: 'Tasmina, once a spoiled child, now lives trapped inside a plastic refugee hut. Days blend together as she listens to life outside but remains cut off; her small world shrinking to shadows on the roof and memories of freedom. Drawing and imagination becomes her only escape as grief, guilt, and isolation close in.<br> Tasmina’s Shelter is an introspective mapping of a child’s fragile attempt to stay alive through imagination while her body remains trapped beneath layers of fear, plastic, and blade wire. The drawing does not reconstruct the refugee camp but instead exposes the psychic chamber she inhabits: a confined plastic hut transformed into an emotional prison wrapped in jagged wire.<br> Her physical reality is rendered through dark base fragments; wooden strips, and blade wires enclosing her sleeping form. These markers of entrapment circle the low bed where she curls up. The blades slice through the space like invisible threats.<br> Above her bed, however, her mind constructs a delicate imagination cap; a radiating dome made of vibrant fragments, airy ramps, and magical wooden strips that spiral upward like a protective halo. This cap is stitched together with mesh lines, a connective tissue of memory and escapism that lifts her out of the black base of despair.<br> A single ramp emerges from the darkness, winding through the wire blades and rising toward the dome. It acts as Tasmina’s mental pathway: the route that lifts her from the ground-level horror to a floating realm where her lost childhood still exists. It is a ramp with no fixed destination; a passage in constant construction each time she closes her eyes.',
                 additionalImages: [
                     [
@@ -468,7 +385,7 @@
                 name: 'I. MIND READING',
                 // img here
                 imageUrl: './assets/Military-1/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project5', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/HPKghPueGAyEiBiVnkr4J5', // Example URL
                 description: 'Around sixty boys some only eleven were locked in a tiny 4x5 meter cell after refusing to join the army. Stripped naked, starved, beaten for crying, and left to sleep among rats and filth, they endured days of humiliation and terror. Some fell sick and died inside that cramped room, their childhoods erased in a space that turned fear, hunger, and grief into a daily sentence of survival. <br> Mind-Reading Arena visualizes the psychological torture inflicted on boys forced to choose between coerced loyalty and brutal punishment. This is not simply a holding cell but an abstracted, mechanical theatre of surveillance and psychic extraction; broadcast for the entertainment of the powerful. <br> At the center of the drawing, a luminous blue sphere hovers; a cold mind-reading core that suspends children like marionettes. Mechanical tentacles descend from it, gripping each captive by the head, probing their thoughts and memories. These harvested thoughts are projected outward onto floating screens that orbit the arena; like twisted thought bubbles turned public spectacle. <br> Below the sphere, a circular stage holds the limp bodies, the children dangling above it, neither alive nor free. The stage is connected to a second platform by a thick pipeline system; the pipeline acts like a mechanical digestive tract: boys who choose to resist are dropped through these tubes, carried away to torture chambers hidden within the architecture. <br> In the narrative drawing, box-like volumes fragment the space; these recall the original crowded room where more than sixty boys were stripped of clothing, dignity, and identity.',
                 additionalImages: [
                     [
@@ -498,7 +415,7 @@
                 name: 'II. PARANOIA',
                 // img here
                 imageUrl: './assets/military-2/4 and cover.png',
-                pageUrl: 'https://www.example.com/project6', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/9D6m1y6Ai2pn41SsR7nLPm', // Example URL
                 description: 'In Myanmar, undercover “soldier-spies” known as Watermelons pose as loyal soldiers while secretly leaking military secrets to the pro-democracy resistance. Their information helps rebels launch ambushes, reclaim territory, and push the once-mighty army back to its weakest point in decades. Many of these spies turned against the junta out of rage at its brutality toward civilians. But living this double life traps them in constant paranoia—hunted by the regime they betrayed and always at risk of being caught in the rebels’ own crossfire. <br> The Paranoia Maze reimagines the fractured mind of a soldier who betrays his own military from within—a Watermelon spy. Once he escapes, he is hunted by both sides, yet his greatest prison is not out there but in his mind. <br> This entire maze becomes an architectural embodiment of that spiraling fear. The entrance begins with engraved stairs and twisting chips. A fractured labyrinth unfolds: warped rooms that spin around him, burning cubes that erupt without warning, hidden blades that slash from the walls, and mirrors that reflect countless fractured versions of himself, each whispering: “Who do you trust now?” <br> Looming towers pierce the ceiling; Spectator Towers where he imagines unseen eyes mocking him. Steel pipe grids block every exit, forcing him to choose blind paths that might lead to freedom—or back to the start. The final exit is no release at all, just another loop. <br> Threaded through it all, mechanical tentacles and ropes snake through walls, floors, and ceilings; the hidden nervous system of the architecture. They stitch every twisting stair, burning cube, blade, and tower together, ensuring that no matter how far he runs, paranoia will follow; a shadow he can never outrun.',
                 additionalImages: [
                     [
@@ -519,7 +436,7 @@
                 name: 'III. MAD SCIENTIST',
                 // img here
                 imageUrl: './assets/Military-3/4-and-cover.png',
-                pageUrl: 'https://www.example.com/project7', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/GV4boBQCKMmzZo2v1w7jqo', // Example URL
                 description: 'Two young soldiers confessed they helped carry out a brutal order: “Kill all you see.” They joined Myanmar’s military as it torched Rohingya villages, shot men, women, and children, raped women, and buried the dead in mass graves. Entire communities were wiped from the map. Their flat, emotionless testimonies reveal how systematic the slaughter was; not an accident but an extermination. While the soldiers’ confessions now stand as the first to break the silence around Myanmar’s genocide. <br> Each morning, the soldier wakes up and enters his lab; but the “lab” is not a hidden bunker underground: it is the very land he and his battalion patrol. Villages become test sites. Homes become operating tables. Families become living specimens. <br> In his monstrous mind, he sees the villages not as places with lives and histories, but as rows of human tubes, each containing a trapped victim to be dissected, burned, or raped; just another day’s experiment. <br> The Anatomical Lab is an architectural horror built from human bones; bridges of ribcages and femurs span the site like arteries of mass slaughter. Sub-bridges lead to transparent tubes where living victims hang like harvested memories. Mechanical tentacles and ropes writhe through the bone structure, igniting violence and binding every chamber together. Fragments of broken machines and charred bodies pulse with an eerie electric orange and purple glow; a grotesque circulatory system that keeps the soldier’s mechanized cruelty alive.',
                 additionalImages: [
                     // img here
@@ -539,11 +456,66 @@
             {
                 id: 'project8',
                 name: 'Comic Book',
-                imageUrl: './assets/comic-book/cover.jpg',
-                // PASTE YOUR PUBLICLY VIEWABLE GOOGLE DRIVE LINK HERE:
-                pdfUrl: 'https://drive.google.com/file/d/1jgWSo0MUfRA90aC36EXjKree1adZezUj/view?usp=sharing',
-                description: 'This project will feature your PDF document, displayed directly within the museum overlay. If it cannot be embedded, a direct download link will be provided.',
-                additionalImages: []
+                imageUrl: './assets/comic-book/cover.jpg', // A placeholder image for the 3D display
+                description: '',
+                additionalImages: [
+                    './assets/comic-book/white_page-0001.jpg',
+                    './assets/comic-book/white_page-0002.jpg',
+                    './assets/comic-book/white_page-0003.jpg',
+                    './assets/comic-book/white_page-0004.jpg',
+                    './assets/comic-book/white_page-0005.jpg',
+                    './assets/comic-book/white_page-0006.jpg',
+                    './assets/comic-book/white_page-0007.jpg',
+                    './assets/comic-book/white_page-0008.jpg',
+                    './assets/comic-book/white_page-0009.jpg',
+                    './assets/comic-book/white_page-0010.jpg',
+                    './assets/comic-book/white_page-0011.jpg',
+                    './assets/comic-book/white_page-0012.jpg',
+                    './assets/comic-book/white_page-0013.jpg',
+                    './assets/comic-book/white_page-0014.jpg',
+                    './assets/comic-book/white_page-0015.jpg',
+                    './assets/comic-book/white_page-0016.jpg',
+                    './assets/comic-book/white_page-0017.jpg',
+                    './assets/comic-book/white_page-0018.jpg',
+                    './assets/comic-book/white_page-0019.jpg',
+                    './assets/comic-book/white_page-0020.jpg',
+                    './assets/comic-book/white_page-0021.jpg',
+                    './assets/comic-book/white_page-0022.jpg',
+                    './assets/comic-book/white_page-0023.jpg',
+                    './assets/comic-book/white_page-0024.jpg',
+                    './assets/comic-book/white_page-0025.jpg',
+                    './assets/comic-book/white_page-0026.jpg',
+                    './assets/comic-book/white_page-0027.jpg',
+                    './assets/comic-book/white_page-0028.jpg',
+                    './assets/comic-book/white_page-0029.jpg',
+                    './assets/comic-book/white_page-0030.jpg',
+                    './assets/comic-book/white_page-0031.jpg',
+                    './assets/comic-book/white_page-0032.jpg',
+                    './assets/comic-book/white_page-0033.jpg',
+                    './assets/comic-book/white_page-0034.jpg',
+                    './assets/comic-book/white_page-0035.jpg',
+                    './assets/comic-book/white_page-0036.jpg',
+                    './assets/comic-book/white_page-0037.jpg',
+                    './assets/comic-book/white_page-0038.jpg',
+                    './assets/comic-book/white_page-0039.jpg',
+                    './assets/comic-book/white_page-0040.jpg',
+                    './assets/comic-book/white_page-0041.jpg',
+                    './assets/comic-book/white_page-0042.jpg',
+                    './assets/comic-book/white_page-0043.jpg',
+                    './assets/comic-book/white_page-0044.jpg',
+                    './assets/comic-book/white_page-0045.jpg',
+                    './assets/comic-book/white_page-0046.jpg',
+                    './assets/comic-book/white_page-0047.jpg',
+                    './assets/comic-book/white_page-0048.jpg',
+                    './assets/comic-book/white_page-0049.jpg',
+                    './assets/comic-book/white_page-0050.jpg',
+                    './assets/comic-book/white_page-0051.jpg',
+                    './assets/comic-book/white_page-0052.jpg',
+                    './assets/comic-book/white_page-0053.jpg',
+                    './assets/comic-book/white_page-0054.jpg',
+                    './assets/comic-book/white_page-0055.jpg',
+                    './assets/comic-book/white_page-0056.jpg',
+                ]
             }
         ];
         
@@ -556,28 +528,28 @@
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
+        // const vector = new THREE.Vector3(); // Not needed anymore for labels
 
         const loadingManager = new THREE.LoadingManager();
         const textureLoader = new THREE.TextureLoader(loadingManager);
         let texturesLoaded = 0;
+        // Total textures: 7 projects + 1 door = 8 textures.
         let totalTexturesToLoad = projectData.length + 1; // Door texture + all project base images
 
         // Get HTML elements for the project detail overlay
         const projectDetailOverlay = document.getElementById('project-detail-overlay');
         const overlayCloseButton = document.getElementById('overlay-close-button');
         const projectDetailTitle = document.getElementById('project-detail-title');
-        const standardProjectDetails = document.getElementById('standard-project-details'); // This div contains standard image/description
         const projectDetailMainImage = document.getElementById('project-detail-main-image');
         const projectDetailDescription = document.getElementById('project-detail-description');
         const projectDetailAdditionalImages = document.getElementById('project-detail-additional-images');
         const projectDetailLink = document.getElementById('project-detail-link'); // Get the new link element
 
-        // PDF Viewer elements (now using iframe)
-        const pdfViewerContainer = document.getElementById('pdf-viewer-container');
-        // pdfLoadingMessage will be retrieved dynamically inside showProjectDetails as it's recreated
+        // No longer need projectLabelsContainer as labels are drawn on textures
+        // const projectLabelsContainer = document.getElementById('project-labels');
 
         // Hallway dimensions (no longer used for walls, but for project distribution)
-        const hallwayRadius = 30; // Increased radius for more space between projects
+        const hallwayRadius = 25; // Used for project distribution distance
         const hallwayHeight = 10; // Used for door height
 
         // --- Utility Functions ---
@@ -671,6 +643,7 @@
             renderer.domElement.addEventListener('touchmove', onTouchMove, false);
             renderer.domElement.addEventListener('touchend', onTouchEnd, false);
 
+
             // Start animation loop
             animate();
 
@@ -694,7 +667,7 @@
 
             const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorDepth);
             // img here
-            textureLoader.load('https://placehold.co/800x800/444444/FFFFFF',
+            textureLoader.load('./assets/Main-story/1-and-main-shot-min.png',
                 (doorTexture) => {
                     // Changed to MeshLambertMaterial to react to lights
                     const doorMaterial = new THREE.MeshLambertMaterial({ map: doorTexture, side: THREE.DoubleSide });
@@ -762,9 +735,8 @@
                         }
                     });
 
-                    // Increased padding
-                    const backgroundPaddingX = 40; // Horizontal padding for background
-                    const backgroundPaddingY = 30; // Vertical padding for background
+                    const backgroundPaddingX = 30; // Horizontal padding for background
+                    const backgroundPaddingY = 20; // Vertical padding for background
                     const backgroundHeight = lines.length * lineHeight + backgroundPaddingY * 2;
                     const backgroundWidth = maxTextWidth + backgroundPaddingX * 2;
 
@@ -836,7 +808,6 @@
                         description: project.description,
                         additionalImages: project.additionalImages,
                         imageUrl: project.imageUrl, // Store imageUrl in userData
-                        pdfUrl: project.pdfUrl, // Store pdfUrl in userData
                         originalPosition: mesh.position.clone(),
                         originalRotation: mesh.rotation.clone(), // Capture rotation AFTER it's set
                         originalScale: mesh.scale.clone()
@@ -1098,136 +1069,6 @@
             tempCamera.lookAt(meshWorldPosition);
             const targetCameraRotation = tempCamera.rotation.clone(); // Clone the calculated rotation
 
-            // Clear previous content and hide all sections initially
-            projectDetailTitle.innerHTML = '';
-            standardProjectDetails.classList.add('hidden'); // Hide standard content
-            pdfViewerContainer.classList.add('hidden'); // Hide PDF viewer content
-
-            // Reset PDF viewer container content for fresh load
-            pdfViewerContainer.innerHTML = '<p id="pdf-loading-message">Loading PDF...</p>';
-            let pdfLoadingMessage = document.getElementById('pdf-loading-message'); // Get reference after reset
-
-            // Populate project title
-            projectDetailTitle.innerHTML = mesh.userData.name;
-
-            // Check if it's a PDF project
-            if (mesh.userData.pdfUrl) {
-                console.log("Attempting to show PDF viewer for:", mesh.userData.name, "Original PDF URL:", mesh.userData.pdfUrl);
-                pdfViewerContainer.classList.remove('hidden');
-                standardProjectDetails.classList.add('hidden'); // Ensure standard is hidden
-
-                // Construct the Google Docs Viewer URL with the original PDF URL encoded
-                const googleViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(mesh.userData.pdfUrl)}&embedded=true`;
-                console.log("Google Docs Viewer URL:", googleViewerUrl);
-
-                const iframe = document.createElement('iframe');
-                iframe.id = 'pdf-viewer-iframe';
-                iframe.src = googleViewerUrl;
-                iframe.setAttribute('allowfullscreen', ''); // Allow fullscreen mode for PDF viewer
-                iframe.style.display = 'none'; // Hide iframe initially until loaded
-                pdfViewerContainer.appendChild(iframe);
-
-                let loadTimeout = setTimeout(() => {
-                    console.warn("PDF iframe loading timed out. Displaying fallback.");
-                    if (pdfLoadingMessage) {
-                        pdfLoadingMessage.textContent = 'PDF could not be embedded. Please use the direct link below.';
-                    }
-                    // Show fallback download link
-                    const fallbackLink = document.createElement('a');
-                    fallbackLink.href = mesh.userData.pdfUrl; // Direct link to the PDF
-                    fallbackLink.textContent = 'Open PDF Directly';
-                    fallbackLink.target = '_blank'; // Open in new tab
-                    const fallbackContainer = document.createElement('div');
-                    fallbackContainer.id = 'pdf-fallback-container';
-                    // Move the message into fallback container if it still exists
-                    if (pdfLoadingMessage && pdfLoadingMessage.parentNode === pdfViewerContainer) {
-                         fallbackContainer.appendChild(pdfLoadingMessage);
-                    } else {
-                        // Recreate if it was removed
-                        pdfLoadingMessage = document.createElement('p');
-                        pdfLoadingMessage.id = 'pdf-loading-message';
-                        pdfLoadingMessage.textContent = 'PDF could not be embedded. Please use the direct link below.';
-                        fallbackContainer.appendChild(pdfLoadingMessage);
-                    }
-                    fallbackContainer.appendChild(fallbackLink);
-                    pdfViewerContainer.appendChild(fallbackContainer);
-                    iframe.remove(); // Remove the problematic iframe
-                }, 10000); // 10 seconds timeout
-
-                iframe.onload = () => {
-                    clearTimeout(loadTimeout); // Clear the timeout if loaded successfully
-                    if (pdfLoadingMessage) {
-                        pdfLoadingMessage.style.display = 'none';
-                    }
-                    iframe.style.display = 'block'; // Show iframe
-                    console.log("PDF iframe loaded successfully.");
-                };
-                iframe.onerror = () => {
-                    clearTimeout(loadTimeout); // Clear timeout on error
-                    if (pdfLoadingMessage) {
-                        pdfLoadingMessage.textContent = 'Failed to load PDF. Check URL or network.';
-                    }
-                    console.error("Error loading PDF iframe.");
-                    showMessageBox('Failed to load PDF. Please check the URL and console for errors.');
-                    // Also show fallback on immediate error
-                    const fallbackLink = document.createElement('a');
-                    fallbackLink.href = mesh.userData.pdfUrl; // Direct link to the PDF
-                    fallbackLink.textContent = 'Open PDF Directly';
-                    fallbackLink.target = '_blank'; // Open in new tab
-                    const fallbackContainer = document.createElement('div');
-                    fallbackContainer.id = 'pdf-fallback-container';
-                    if (pdfLoadingMessage && pdfLoadingMessage.parentNode === pdfViewerContainer) {
-                         fallbackContainer.appendChild(pdfLoadingMessage);
-                    } else {
-                        pdfLoadingMessage = document.createElement('p');
-                        pdfLoadingMessage.id = 'pdf-loading-message';
-                        pdfLoadingMessage.textContent = 'Failed to load PDF. Check URL or network.';
-                        fallbackContainer.appendChild(pdfLoadingMessage);
-                    }
-                    fallbackContainer.appendChild(fallbackLink);
-                    pdfViewerContainer.appendChild(fallbackContainer);
-                    iframe.remove();
-                };
-
-            } else {
-                console.log("Showing standard project details for:", mesh.userData.name);
-                standardProjectDetails.classList.remove('hidden'); // Ensure standard is visible
-                pdfViewerContainer.classList.add('hidden'); // Ensure PDF viewer is hidden
-
-                projectDetailMainImage.src = mesh.userData.imageUrl;
-                projectDetailDescription.innerHTML = `<p>${mesh.userData.description}</p>`;
-
-                // Clear and populate additional images
-                projectDetailAdditionalImages.innerHTML = '';
-                if (mesh.userData.additionalImages && mesh.userData.additionalImages.length > 0) {
-                    mesh.userData.additionalImages.forEach(item => {
-                        if (Array.isArray(item)) {
-                            const rowDiv = document.createElement('div');
-                            rowDiv.className = 'image-group-row';
-                            item.forEach(imgUrl => {
-                                const img = document.createElement('img');
-                                img.src = imgUrl;
-                                img.alt = 'Additional Project Image';
-                                rowDiv.appendChild(img);
-                            });
-                            projectDetailAdditionalImages.appendChild(rowDiv);
-                        } else {
-                            const img = document.createElement('img');
-                            img.src = item;
-                            img.alt = 'Additional Project Image';
-                            img.className = 'full-width-image';
-                            projectDetailAdditionalImages.appendChild(img);
-                        }
-                    });
-                }
-
-                // Populate the project link
-                if (projectDetailLink) {
-                    projectDetailLink.href = mesh.userData.pageUrl || '#';
-                    projectDetailLink.textContent = `Click here to learn more`;
-                }
-            }
-
             // Animate both camera position and rotation
             gsap.to(camera.position, {
                 duration: 1,
@@ -1235,14 +1076,47 @@
                 y: targetCameraPosition.y,
                 z: targetCameraPosition.z,
                 ease: "power2.inOut",
-                onUpdate: () => {
-                    // Make camera look at the mesh during animation
-                    camera.lookAt(meshWorldPosition); // Look at the mesh's world position
-                },
                 onComplete: () => {
                     // Once camera animation is complete, hide the 3D mesh and show HTML overlay
                     mesh.visible = false; // Hide the 3D mesh
                     renderer.domElement.style.opacity = '0.3'; // Dim the 3D scene
+
+                    // Populate overlay content
+                    projectDetailTitle.innerHTML = mesh.userData.name; // Changed to innerHTML
+                    projectDetailMainImage.src = mesh.userData.imageUrl; // Access imageUrl from userData
+                    projectDetailDescription.innerHTML = `<p>${mesh.userData.description}</p>`; // Already innerHTML, good
+
+                    // Clear previous additional images and populate based on new structure
+                    projectDetailAdditionalImages.innerHTML = '';
+                    if (mesh.userData.additionalImages && mesh.userData.additionalImages.length > 0) {
+                        mesh.userData.additionalImages.forEach(item => {
+                            if (Array.isArray(item)) {
+                                // If 'item' is an array, it means these images should be in a row
+                                const rowDiv = document.createElement('div');
+                                rowDiv.className = 'image-group-row'; // Apply the flexbox class for rows
+                                item.forEach(imgUrl => {
+                                    const img = document.createElement('img');
+                                    img.src = imgUrl;
+                                    img.alt = 'Additional Project Image';
+                                    rowDiv.appendChild(img);
+                                });
+                                projectDetailAdditionalImages.appendChild(rowDiv);
+                            } else {
+                                // If 'item' is a string, it's a single image that should take full width
+                                const img = document.createElement('img');
+                                img.src = item; // 'item' is directly the image URL
+                                img.alt = 'Additional Project Image';
+                                img.className = 'full-width-image'; // Apply the full-width class
+                                projectDetailAdditionalImages.appendChild(img);
+                            }
+                        });
+                    }
+
+                    // Populate the project link
+                    if (projectDetailLink) {
+                        projectDetailLink.href = mesh.userData.pageUrl || '#'; // Use pageUrl from userData
+                        projectDetailLink.textContent = `VR View`; // Generic link text
+                    }
 
                     // Reset scroll position to top
                     projectDetailOverlay.scrollTop = 0;
@@ -1265,14 +1139,8 @@
          * Hides the HTML project detail overlay and returns to the museum view.
          */
         function hideProjectDetails() {
-            console.log("Hiding project details overlay.");
             // Hide the overlay with animation
             projectDetailOverlay.classList.remove('active');
-
-            // Clear PDF viewer content and reset loading message
-            pdfViewerContainer.classList.add('hidden');
-            // Reset the inner HTML to ensure the loading message is present for the next PDF load
-            pdfViewerContainer.innerHTML = '<p id="pdf-loading-message">Loading PDF...</p>';
 
             // Animate camera back to the center of the room (0,0,0)
             gsap.to(camera.position, {
@@ -1306,6 +1174,8 @@
                     renderer.domElement.style.cursor = 'grab';
 
                     currentlyFullScreenMesh = null; // Clear the reference
+
+                    // Labels are now part of the texture, no separate HTML labels to show/hide
                 }
             });
 
