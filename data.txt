@@ -1,11 +1,10 @@
-
                 const projectData = [
             {
                 id: 'project1',
                 name: 'UNSPOKEN TALES <br> Emotional Limbo',
                 // img here
                 imageUrl: './assets/Main-story/1-and-main-shot-min.png', // Larger image for hero section
-                pageUrl: 'https://www.example.com/project1', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/Phe2N3MhDdvtSqfZ38QoAh', // Example URL
                 description: 'This project, rooted in Constructivist Grounded Theory and existential phenomenology, explores how architectural spaces embody emotion, story, and memory, particularly within the context of Myanmar’s civil conflict. <br> Through in-depth interviews with eleven survivors, personal testimonies are transformed into spatial narratives. <br> The core inquiry revolves around visually communicating these survivor stories, interpreting the interplay of narrative, space, and emotion, and ultimately turning spaces into stories through visual communication. <br> Drawings inspired from influential architects and theorists, used by exaggerated geometry, strong linework, and color to visually express powerful emotions like dread, despair, and resistance. <br> As each becomes an immersive, fictitious world, turning personal narratives into spatial acts that challenge viewers’ perceptions and ethics. <br> Ultimately, it is about creating emotional realities through drawing and architecture, using Myanmar as a poignant case study to confront silence and normalized cruelty. <br> However, this project does not seek to produce a buildable structure, but rather to explore architecture as a medium for expressing psychological rupture. Through drawings, trauma is translated into spatial language using architectural fragments as emotional metaphors. As it is rooted in introspection and memory deconstruction, as it maps real wartime experiences in Myanmar not as literal scenes, but as emotional landscapes.',
                 additionalImages: [
                     // img here
@@ -29,7 +28,7 @@
                 name: 'I. LOST',
                 // img here
                 imageUrl: './assets/Local-1/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project2', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/SRYzaeLvvrwYLPggbpk2ZS', // Example URL
                 description: 'Lost is a spatial fiction that drifts between a father’s fractured memories and a boy’s relentless search for safety in a forest that never quite ends. The drawing stages this disoriented journey as an abstract terrain of interwoven stairs, vertical slivers of local trees, and suspended red voids that hover like unspoken threats. <br> This maze is not merely a forest; it is a mental landscape carved by grief and survival. Each stairway proposes a choice: some lead to exposed crimson spaces; blatant, watchful, unsafe. Others break mid-flight, severing the promise of escape. Only one hidden path threads the boy’s desperate movements to a concealed chamber: a slaughterhouse nested at the forest’s dense core. <br> Vertical elements stretch like scar tissue; trees reborn as pillars of loss; holding up red pockets of slaughtered memory. Nets and wire-like strands weave through this forest, a subjective circuitry binding grief to place, tracing trauma’s impossibility to resolve. These wires are not just structural; they are veins of remembrance; fragile connections that tie the father’s vanished sons to the boy’s flickering hope of reunion. <br> Inside this unstable terrain, the drawing becomes both shelter and trap; a cruel sanctuary of paths looping back to the violence they try to escape. The turquoise, green, fuchsia, and red bleed into each other, mirroring the unresolved tension between finding safety and stumbling upon horror.<br> This methodology layers iterative fragmentation and spatial folding, dissecting real routes and imagined wanderings into a fractured 3D scaffold. Stairway assemblages act as lines of decision; some lead to exposed voids of grief, others dissolve into nowhere. Wire tensions weave through the spaces like veins of unspoken trauma, binding the fragments together.',
                 additionalImages: [
                     [
@@ -55,7 +54,7 @@
                 name: 'II. EXPLOSION',
                 // img here
                 imageUrl: './assets/Local-2/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project3', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/Jpgt2jjkDzoyEPAgUUJ67E', // Example URL
                 description: 'This story revolves around two brothers, Showife and Mohammadul, who lived in a tight-knit Rohingya family under siege by the military. When soldiers came to capture Showife, he hid in the upper floor, hoping to protect his family. Instead, the military raided the house, assaulting the women and killing the men. Showife, frozen by fear, abandoned his wounded brother. As he fled, the betrayal and horror splintered his mind, his guilt an endless loop. <br> Lines, stairs, slabs, and nets are exploded, distorted, and scattered markers of loss, fear, and fragmentation. This drawing visualizes a moment in which a man lost his family, during a military raid, believing they were safe in their wooden home whilst he is hiding in the upper floor. I depict not the event itself, but the emotional implosion that followed—a home bursting outward from within, collapsing under the weight of helplessness. <br> The drawing is composed of overlapping fragments—architectural elements like stairs, sections of walls, and floor slabs, assembled in a chaotic yet intentional manner. Using projection lines from traditional architectural methods like plans and sections, but distorts and collides them to break away from conventional ways of representing space. The drawing is anchored on a radial grid with angular coordinates, referencing compass directions, symbolizing disorientation or mental mapping. Rather than illustrating a real building, this is an introspective process. The approach follows Constructivist ideas, favoring process, deconstruction, and personal narrative over functionality or realism. The drawing is a mapping narrative tool, each layer or projection line representing different timeframes, memories, or emotional states. <br> This methodology explodes architectural conventions into fractured layers of disorientation and grief.',
                 additionalImages: [
                     [
@@ -85,7 +84,7 @@
                 name: 'III. DAY DREAMING',
                 // img here
                 imageUrl: './assets/Local-3/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project4', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/TZoKt1XuZjUjDjCZ6Yh3N3', // Example URL
                 description: 'Tasmina, once a spoiled child, now lives trapped inside a plastic refugee hut. Days blend together as she listens to life outside but remains cut off; her small world shrinking to shadows on the roof and memories of freedom. Drawing and imagination becomes her only escape as grief, guilt, and isolation close in.<br> Tasmina’s Shelter is an introspective mapping of a child’s fragile attempt to stay alive through imagination while her body remains trapped beneath layers of fear, plastic, and blade wire. The drawing does not reconstruct the refugee camp but instead exposes the psychic chamber she inhabits: a confined plastic hut transformed into an emotional prison wrapped in jagged wire.<br> Her physical reality is rendered through dark base fragments; wooden strips, and blade wires enclosing her sleeping form. These markers of entrapment circle the low bed where she curls up. The blades slice through the space like invisible threats.<br> Above her bed, however, her mind constructs a delicate imagination cap; a radiating dome made of vibrant fragments, airy ramps, and magical wooden strips that spiral upward like a protective halo. This cap is stitched together with mesh lines, a connective tissue of memory and escapism that lifts her out of the black base of despair.<br> A single ramp emerges from the darkness, winding through the wire blades and rising toward the dome. It acts as Tasmina’s mental pathway: the route that lifts her from the ground-level horror to a floating realm where her lost childhood still exists. It is a ramp with no fixed destination; a passage in constant construction each time she closes her eyes.',
                 additionalImages: [
                     [
@@ -115,7 +114,7 @@
                 name: 'I. MIND READING',
                 // img here
                 imageUrl: './assets/Military-1/4-and-cover-min.png',
-                pageUrl: 'https://www.example.com/project5', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/HPKghPueGAyEiBiVnkr4J5', // Example URL
                 description: 'Around sixty boys some only eleven were locked in a tiny 4x5 meter cell after refusing to join the army. Stripped naked, starved, beaten for crying, and left to sleep among rats and filth, they endured days of humiliation and terror. Some fell sick and died inside that cramped room, their childhoods erased in a space that turned fear, hunger, and grief into a daily sentence of survival. <br> Mind-Reading Arena visualizes the psychological torture inflicted on boys forced to choose between coerced loyalty and brutal punishment. This is not simply a holding cell but an abstracted, mechanical theatre of surveillance and psychic extraction; broadcast for the entertainment of the powerful. <br> At the center of the drawing, a luminous blue sphere hovers; a cold mind-reading core that suspends children like marionettes. Mechanical tentacles descend from it, gripping each captive by the head, probing their thoughts and memories. These harvested thoughts are projected outward onto floating screens that orbit the arena; like twisted thought bubbles turned public spectacle. <br> Below the sphere, a circular stage holds the limp bodies, the children dangling above it, neither alive nor free. The stage is connected to a second platform by a thick pipeline system; the pipeline acts like a mechanical digestive tract: boys who choose to resist are dropped through these tubes, carried away to torture chambers hidden within the architecture. <br> In the narrative drawing, box-like volumes fragment the space; these recall the original crowded room where more than sixty boys were stripped of clothing, dignity, and identity.',
                 additionalImages: [
                     [
@@ -145,7 +144,7 @@
                 name: 'II. PARANOIA',
                 // img here
                 imageUrl: './assets/military-2/4 and cover.png',
-                pageUrl: 'https://www.example.com/project6', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/9D6m1y6Ai2pn41SsR7nLPm', // Example URL
                 description: 'In Myanmar, undercover “soldier-spies” known as Watermelons pose as loyal soldiers while secretly leaking military secrets to the pro-democracy resistance. Their information helps rebels launch ambushes, reclaim territory, and push the once-mighty army back to its weakest point in decades. Many of these spies turned against the junta out of rage at its brutality toward civilians. But living this double life traps them in constant paranoia—hunted by the regime they betrayed and always at risk of being caught in the rebels’ own crossfire. <br> The Paranoia Maze reimagines the fractured mind of a soldier who betrays his own military from within—a Watermelon spy. Once he escapes, he is hunted by both sides, yet his greatest prison is not out there but in his mind. <br> This entire maze becomes an architectural embodiment of that spiraling fear. The entrance begins with engraved stairs and twisting chips. A fractured labyrinth unfolds: warped rooms that spin around him, burning cubes that erupt without warning, hidden blades that slash from the walls, and mirrors that reflect countless fractured versions of himself, each whispering: “Who do you trust now?” <br> Looming towers pierce the ceiling; Spectator Towers where he imagines unseen eyes mocking him. Steel pipe grids block every exit, forcing him to choose blind paths that might lead to freedom—or back to the start. The final exit is no release at all, just another loop. <br> Threaded through it all, mechanical tentacles and ropes snake through walls, floors, and ceilings; the hidden nervous system of the architecture. They stitch every twisting stair, burning cube, blade, and tower together, ensuring that no matter how far he runs, paranoia will follow; a shadow he can never outrun.',
                 additionalImages: [
                     [
@@ -166,7 +165,7 @@
                 name: 'III. MAD SCIENTIST',
                 // img here
                 imageUrl: './assets/Military-3/4-and-cover.png',
-                pageUrl: 'https://www.example.com/project7', // Example URL
+                pageUrl: 'https://cloud.chaos.com/collaboration/n/GV4boBQCKMmzZo2v1w7jqo', // Example URL
                 description: 'Two young soldiers confessed they helped carry out a brutal order: “Kill all you see.” They joined Myanmar’s military as it torched Rohingya villages, shot men, women, and children, raped women, and buried the dead in mass graves. Entire communities were wiped from the map. Their flat, emotionless testimonies reveal how systematic the slaughter was; not an accident but an extermination. While the soldiers’ confessions now stand as the first to break the silence around Myanmar’s genocide. <br> Each morning, the soldier wakes up and enters his lab; but the “lab” is not a hidden bunker underground: it is the very land he and his battalion patrol. Villages become test sites. Homes become operating tables. Families become living specimens. <br> In his monstrous mind, he sees the villages not as places with lives and histories, but as rows of human tubes, each containing a trapped victim to be dissected, burned, or raped; just another day’s experiment. <br> The Anatomical Lab is an architectural horror built from human bones; bridges of ribcages and femurs span the site like arteries of mass slaughter. Sub-bridges lead to transparent tubes where living victims hang like harvested memories. Mechanical tentacles and ropes writhe through the bone structure, igniting violence and binding every chamber together. Fragments of broken machines and charred bodies pulse with an eerie electric orange and purple glow; a grotesque circulatory system that keeps the soldier’s mechanized cruelty alive.',
                 additionalImages: [
                     // img here
@@ -187,10 +186,65 @@
                 id: 'project8',
                 name: 'Comic Book',
                 imageUrl: './assets/comic-book/cover.jpg', // A placeholder image for the 3D display
-                // Changed to Google Docs Viewer URL for reliable embedding
-                pdfUrl: 'https://drive.google.com/uc?export=download&id=1jgWSo0MUfRA90aC36EXjKree1adZezUj',
-                description: 'This project demonstrates an interactive PDF viewer, designed to display document pages clearly. Users can navigate through the document using intuitive controls.',
-                additionalImages: [] // No additional images for PDF projects typically
+                description: '',
+                additionalImages: [
+                    './assets/comic-book/white_page-0001.jpg',
+                    './assets/comic-book/white_page-0002.jpg',
+                    './assets/comic-book/white_page-0003.jpg',
+                    './assets/comic-book/white_page-0004.jpg',
+                    './assets/comic-book/white_page-0005.jpg',
+                    './assets/comic-book/white_page-0006.jpg',
+                    './assets/comic-book/white_page-0007.jpg',
+                    './assets/comic-book/white_page-0008.jpg',
+                    './assets/comic-book/white_page-0009.jpg',
+                    './assets/comic-book/white_page-0010.jpg',
+                    './assets/comic-book/white_page-0011.jpg',
+                    './assets/comic-book/white_page-0012.jpg',
+                    './assets/comic-book/white_page-0013.jpg',
+                    './assets/comic-book/white_page-0014.jpg',
+                    './assets/comic-book/white_page-0015.jpg',
+                    './assets/comic-book/white_page-0016.jpg',
+                    './assets/comic-book/white_page-0017.jpg',
+                    './assets/comic-book/white_page-0018.jpg',
+                    './assets/comic-book/white_page-0019.jpg',
+                    './assets/comic-book/white_page-0020.jpg',
+                    './assets/comic-book/white_page-0021.jpg',
+                    './assets/comic-book/white_page-0022.jpg',
+                    './assets/comic-book/white_page-0023.jpg',
+                    './assets/comic-book/white_page-0024.jpg',
+                    './assets/comic-book/white_page-0025.jpg',
+                    './assets/comic-book/white_page-0026.jpg',
+                    './assets/comic-book/white_page-0027.jpg',
+                    './assets/comic-book/white_page-0028.jpg',
+                    './assets/comic-book/white_page-0029.jpg',
+                    './assets/comic-book/white_page-0030.jpg',
+                    './assets/comic-book/white_page-0031.jpg',
+                    './assets/comic-book/white_page-0032.jpg',
+                    './assets/comic-book/white_page-0033.jpg',
+                    './assets/comic-book/white_page-0034.jpg',
+                    './assets/comic-book/white_page-0035.jpg',
+                    './assets/comic-book/white_page-0036.jpg',
+                    './assets/comic-book/white_page-0037.jpg',
+                    './assets/comic-book/white_page-0038.jpg',
+                    './assets/comic-book/white_page-0039.jpg',
+                    './assets/comic-book/white_page-0040.jpg',
+                    './assets/comic-book/white_page-0041.jpg',
+                    './assets/comic-book/white_page-0042.jpg',
+                    './assets/comic-book/white_page-0043.jpg',
+                    './assets/comic-book/white_page-0044.jpg',
+                    './assets/comic-book/white_page-0045.jpg',
+                    './assets/comic-book/white_page-0046.jpg',
+                    './assets/comic-book/white_page-0047.jpg',
+                    './assets/comic-book/white_page-0048.jpg',
+                    './assets/comic-book/white_page-0049.jpg',
+                    './assets/comic-book/white_page-0050.jpg',
+                    './assets/comic-book/white_page-0051.jpg',
+                    './assets/comic-book/white_page-0052.jpg',
+                    './assets/comic-book/white_page-0053.jpg',
+                    './assets/comic-book/white_page-0054.jpg',
+                    './assets/comic-book/white_page-0055.jpg',
+                    './assets/comic-book/white_page-0056.jpg',
+                ]
             }
         ];
         
