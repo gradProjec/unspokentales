@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduation Project Museum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* Keep body overflow hidden to prevent external scrollbars */
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Dark background for the page */
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            position: fixed; /* Ensure canvas stays fixed behind */
+            top: 0;
+            left: 0;
+            z-index: 1; /* Below the project detail overlay */
+            transition: opacity 0.5s ease-in-out; /* For dimming effect */
+        }
+        #loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            z-index: 100;
+            flex-direction: column;
+        }
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            z-index: 101;
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+        #message-box button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #message-box button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Project Detail Overlay Styles */
+        #project-detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); /* Darker overlay */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to the top */
+            padding: 0; /* Remove padding from overlay itself */
+            box-sizing: border-box;
+            z-index: 50; /* Above canvas, below message box */
+            opacity: 0; /* Start hidden for fade-in animation */
+            visibility: hidden; /* Ensure it's not interactive when hidden */
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            color: white; /* Default text color for overlay content */
+            overflow-y: auto; /* Allow scrolling for the entire overlay */
+        }
+        #project-detail-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #project-detail-content {
+            background-color: #1a1a1a; /* Dark background for content box */
+            border-radius: 0; /* No border-radius */
+            box-shadow: none; /* No box-shadow */
+            padding: 0; /* Remove padding from content box itself */
+            max-width: 100%; /* Make it full width */
+            width: 100%;
+            max-height: none; /* Allow full height */
+            overflow-y: visible; /* Content will scroll via parent overlay */
+            position: relative;
+            transform: translateY(0); /* No initial transform, will be animated */
+            transition: none; /* No transition on content box itself */
+        }
+
+        #overlay-close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 2em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 51; /* Above content, below message box */
+        }
+        #overlay-close-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Hero Image Styles */
+        #project-detail-main-image {
+            width: 100%;
+            height: auto; /* Changed to auto for responsiveness */
+            max-height: 60vh; /* Added max-height to prevent excessive height */
+            object-fit: contain; /* Changed to contain to prevent cropping */
+            border-radius: 0; /* No border-radius */
+            margin-bottom: 0; /* No margin below hero image */
+            display: block; /* Ensures it behaves like a block element for margin auto */
+            margin-left: auto; /* Center the image horizontally */
+            margin-right: auto; /* Center the image horizontally */
+        }
+
+        /* Content below hero image */
+        #project-content-body {
+            padding: 40px; /* Add padding to this inner div */
+            max-width: 1000px; /* Constrain width for readability */
+            margin: 0 auto; /* Center content */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #project-detail-title {
+            font-size: 3.5em; /* Larger title */
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 255, 255, 0.5); /* Glowing effect */
+            margin-top: 40px; /* Space above title */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #project-detail-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        #project-detail-additional-images {
+            display: block; /* Keep as block to stack groups/single images by default */
+            margin-bottom: 30px;
+        }
+
+        /* New class for image rows */
+        .image-group-row {
+            display: flex;
+            flex-wrap: wrap; /* Allows images to wrap to the next line if space is limited */
+            justify-content: center; /* Centers images within the row, adjust as needed (e.g., flex-start for left-aligned) */
+            gap: 15px; /* Spacing between images in the same row */
+            margin-bottom: 20px; /* Spacing below the row */
+        }
+
+        /* Style for individual images within a row */
+        .image-group-row img {
+            flex: 1 1 auto; /* Allows images to grow and shrink, but keeps aspect ratio */
+            min-width: 150px; /* Minimum width for images in a row to prevent them from becoming too small */
+            max-width: calc(50% - 7.5px); /* Max width for two images in a row with gap */
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Style for individual images that should be full width */
+        .full-width-image {
+            display: block; /* Ensure it takes full width */
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 20px; /* Spacing below the image */
+        }
+
+        /* Ensure no extra margin on the very last image/group */
+        #project-detail-additional-images > :last-child {
+            margin-bottom: 0;
+        }
+
+        /* PDF Viewer Specific Styles (Using iframe) */
+        #pdf-viewer-container {
+            width: 100%;
+            max-width: 900px; /* Max width for the PDF viewer */
+            height: 80vh; /* Fixed height for the iframe container */
+            margin: 40px auto; /* Center the container with vertical margin */
+            display: flex; /* Overridden by .hidden when not active */
+            flex-direction: column;
+            align-items: center;
+            background-color: #2a2a2a; /* Dark background for the viewer */
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4); /* Glowing shadow */
+            box-sizing: border-box;
+            position: relative; /* For loading message positioning */
+        }
+
+        #pdf-viewer-iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* No default iframe border */
+            border-radius: 8px;
+            background-color: white; /* Background for the PDF area */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Shadow for the PDF */
+        }
+
+        #pdf-loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 1.5em;
+            text-align: center;
+            z-index: 2; /* Above iframe if it's slow to load */
+        }
+
+        #pdf-fallback-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            border-radius: 15px; /* Match parent container */
+            z-index: 3; /* Above iframe and loading message */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #pdf-fallback-container a {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none; /* Remove underline from link */
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        #pdf-fallback-container a:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <p>Loading Museum...</p>
+        <div class="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin mt-4"></div>
+    </div>
+
+    <div id="message-box" class="rounded-lg">
+        <p id="message-text"></p>
+        <button id="message-ok-button">OK</button>
+    </div>
+
+    <!-- Project Detail Overlay (hidden by default) -->
+    <div id="project-detail-overlay">
+        <button id="overlay-close-button">&times;</button>
+        <div id="project-detail-content">
+            <!-- Standard Project Details (Image, Description, Additional Images, Link) -->
+            <div id="standard-project-details">
+                <img id="project-detail-main-image" src="" alt="Project Main Image">
+                <div id="project-content-body">
+                    <h2 id="project-detail-title"></h2>
+                    <div id="project-detail-description"></div>
+                    <div id="project-detail-additional-images"></div>
+                    <!-- Project Link -->
+                    <div class="text-center mt-8">
+                        <a id="project-detail-link" href="#" target="_blank" class="text-blue-400 hover:underline text-lg font-semibold">
+                            Click here to learn more
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF Viewer Container (Using iframe) -->
+            <div id="pdf-viewer-container" class="hidden">
+                <p id="pdf-loading-message">Loading PDF...</p>
+                <!-- The iframe will be dynamically added here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Global Variables ---
+        let scene, camera, renderer;
+        let isDragging = false;
+        let previousMouseX = 0;
+        let previousMouseY = 0;
+        let cameraTargetRotationY = 0;
+        let cameraTargetRotationX = 0;
+        const rotationSpeed = 0.002; // Adjust for faster/slower rotation
+        const maxVerticalRotation = Math.PI / 2.5; // Limit vertical look up/down
+
+        let doorMesh; // New variable for the entrance door
+        let hasEnteredMuseum = false; // Flag to control camera movement and interactions
+
+        // Variables for touch tap detection
+        let initialTouchX = 0;
+        let initialTouchY = 0;
+        const tapThreshold = 10; // Max pixels moved for a touch to be considered a tap
+
+        // --- Project Data ---
+        // IMPORTANT: Replace this array with your actual project data.
+        // For 'name' and 'description', you can use <br> for new lines.
+        // For 'additionalImages', use a string for full-width images,
+        // and an array of strings for images you want in a row.
+        // For PDF projects, add a 'pdfUrl' field.
+
+
+                const projectData = [
+            {
+                id: 'project1',
+                name: 'UNSPOKEN TALES <br> Emotional Limbo',
+                // img here
+                imageUrl: './assets/Main-story/1-and-main-shot-min.png', // Larger image for hero section
+                pageUrl: 'https://www.example.com/project1', // Example URL
+                description: 'This project, rooted in Constructivist Grounded Theory and existential phenomenology, explores how architectural spaces embody emotion, story, and memory, particularly within the context of Myanmar’s civil conflict. <br> Through in-depth interviews with eleven survivors, personal testimonies are transformed into spatial narratives. <br> The core inquiry revolves around visually communicating these survivor stories, interpreting the interplay of narrative, space, and emotion, and ultimately turning spaces into stories through visual communication. <br> Drawings inspired from influential architects and theorists, used by exaggerated geometry, strong linework, and color to visually express powerful emotions like dread, despair, and resistance. <br> As each becomes an immersive, fictitious world, turning personal narratives into spatial acts that challenge viewers’ perceptions and ethics. <br> Ultimately, it is about creating emotional realities through drawing and architecture, using Myanmar as a poignant case study to confront silence and normalized cruelty. <br> However, this project does not seek to produce a buildable structure, but rather to explore architecture as a medium for expressing psychological rupture. Through drawings, trauma is translated into spatial language using architectural fragments as emotional metaphors. As it is rooted in introspection and memory deconstruction, as it maps real wartime experiences in Myanmar not as literal scenes, but as emotional landscapes.',
+                additionalImages: [
+                    // img here
+                    './assets/Main-story/1-and-main-shot-min.png',
+                    // img here
+                    './assets/Main-story/2-min.png',
+                    // img here
+                    './assets/Main-story/3-min.png',
+                    // img here
+                    './assets/Main-story/4-min.png',
+                    // img here
+                    './assets/Main-story/5-min.png',
+                    // img here
+                    './assets/Main-story/6-min.png',
+                    // img here
+                    './assets/Main-story/7-min.png',
+                ]
+            },
+            {
+                id: 'project2',
+                name: 'I. LOST',
+                // img here
+                imageUrl: './assets/Local-1/4-and-cover-min.png',
+                pageUrl: 'https://www.example.com/project2', // Example URL
+                description: 'Lost is a spatial fiction that drifts between a father’s fractured memories and a boy’s relentless search for safety in a forest that never quite ends. The drawing stages this disoriented journey as an abstract terrain of interwoven stairs, vertical slivers of local trees, and suspended red voids that hover like unspoken threats. <br> This maze is not merely a forest; it is a mental landscape carved by grief and survival. Each stairway proposes a choice: some lead to exposed crimson spaces; blatant, watchful, unsafe. Others break mid-flight, severing the promise of escape. Only one hidden path threads the boy’s desperate movements to a concealed chamber: a slaughterhouse nested at the forest’s dense core. <br> Vertical elements stretch like scar tissue; trees reborn as pillars of loss; holding up red pockets of slaughtered memory. Nets and wire-like strands weave through this forest, a subjective circuitry binding grief to place, tracing trauma’s impossibility to resolve. These wires are not just structural; they are veins of remembrance; fragile connections that tie the father’s vanished sons to the boy’s flickering hope of reunion. <br> Inside this unstable terrain, the drawing becomes both shelter and trap; a cruel sanctuary of paths looping back to the violence they try to escape. The turquoise, green, fuchsia, and red bleed into each other, mirroring the unresolved tension between finding safety and stumbling upon horror.<br> This methodology layers iterative fragmentation and spatial folding, dissecting real routes and imagined wanderings into a fractured 3D scaffold. Stairway assemblages act as lines of decision; some lead to exposed voids of grief, others dissolve into nowhere. Wire tensions weave through the spaces like veins of unspoken trauma, binding the fragments together.',
+                additionalImages: [
+                    [
+                    './assets/Local-1/with-text-1-min.png',
+                    './assets/Local-1/with-text-min.png',
+                    ],
+                    // img here
+                    './assets/Local-1/1-min.png',
+                    // img here
+                    './assets/Local-1/2-min.png',
+                    // img here
+                    './assets/Local-1/3-min.png',
+                    // img here
+                    './assets/Local-1/4-and-cover-min.png',
+                    // img here
+                    './assets/Local-1/5-min.png',
+                    // img here
+                    './assets/Local-1/6-min.png',
+                ]
+            },
+            {
+                id: 'project3',
+                name: 'II. EXPLOSION',
+                // img here
+                imageUrl: './assets/Local-2/4-and-cover-min.png',
+                pageUrl: 'https://www.example.com/project3', // Example URL
+                description: 'This story revolves around two brothers, Showife and Mohammadul, who lived in a tight-knit Rohingya family under siege by the military. When soldiers came to capture Showife, he hid in the upper floor, hoping to protect his family. Instead, the military raided the house, assaulting the women and killing the men. Showife, frozen by fear, abandoned his wounded brother. As he fled, the betrayal and horror splintered his mind, his guilt an endless loop. <br> Lines, stairs, slabs, and nets are exploded, distorted, and scattered markers of loss, fear, and fragmentation. This drawing visualizes a moment in which a man lost his family, during a military raid, believing they were safe in their wooden home whilst he is hiding in the upper floor. I depict not the event itself, but the emotional implosion that followed—a home bursting outward from within, collapsing under the weight of helplessness. <br> The drawing is composed of overlapping fragments—architectural elements like stairs, sections of walls, and floor slabs, assembled in a chaotic yet intentional manner. Using projection lines from traditional architectural methods like plans and sections, but distorts and collides them to break away from conventional ways of representing space. The drawing is anchored on a radial grid with angular coordinates, referencing compass directions, symbolizing disorientation or mental mapping. Rather than illustrating a real building, this is an introspective process. The approach follows Constructivist ideas, favoring process, deconstruction, and personal narrative over functionality or realism. The drawing is a mapping narrative tool, each layer or projection line representing different timeframes, memories, or emotional states. <br> This methodology explodes architectural conventions into fractured layers of disorientation and grief.',
+                additionalImages: [
+                    [
+                    './assets/Local-2/with-text-1-min.png',
+                    // img here
+                    './assets/Local-2/with-text-min.png',
+                    ],
+                    // img here
+                    './assets/Local-2/1-min.png',
+                    // img here
+                    './assets/Local-2/2-min.png',
+                    // img here
+                    './assets/Local-2/3-min.png',
+                    // img here
+                    './assets/Local-2/4-and-cover-min.png',
+                    // img here
+                    './assets/Local-2/5-min.png',
+                    // img here
+                    './assets/Local-2/6-min.png',
+                    // img here
+                    './assets/Local-2/7-min.png',
+                    // img here
+                ]
+            },
+            {
+                id: 'project4',
+                name: 'III. DAY DREAMING',
+                // img here
+                imageUrl: './assets/Local-3/4-and-cover-min.png',
+                pageUrl: 'https://www.example.com/project4', // Example URL
+                description: 'Tasmina, once a spoiled child, now lives trapped inside a plastic refugee hut. Days blend together as she listens to life outside but remains cut off; her small world shrinking to shadows on the roof and memories of freedom. Drawing and imagination becomes her only escape as grief, guilt, and isolation close in.<br> Tasmina’s Shelter is an introspective mapping of a child’s fragile attempt to stay alive through imagination while her body remains trapped beneath layers of fear, plastic, and blade wire. The drawing does not reconstruct the refugee camp but instead exposes the psychic chamber she inhabits: a confined plastic hut transformed into an emotional prison wrapped in jagged wire.<br> Her physical reality is rendered through dark base fragments; wooden strips, and blade wires enclosing her sleeping form. These markers of entrapment circle the low bed where she curls up. The blades slice through the space like invisible threats.<br> Above her bed, however, her mind constructs a delicate imagination cap; a radiating dome made of vibrant fragments, airy ramps, and magical wooden strips that spiral upward like a protective halo. This cap is stitched together with mesh lines, a connective tissue of memory and escapism that lifts her out of the black base of despair.<br> A single ramp emerges from the darkness, winding through the wire blades and rising toward the dome. It acts as Tasmina’s mental pathway: the route that lifts her from the ground-level horror to a floating realm where her lost childhood still exists. It is a ramp with no fixed destination; a passage in constant construction each time she closes her eyes.',
+                additionalImages: [
+                    [
+                    './assets/Local-3/with-text-1-min.png',
+                    // img here
+                    './assets/Local-3/with-text-min.png',
+                    ],
+                    // img here
+                    './assets/Local-3/1-min.png',
+                    // img here
+                    './assets/Local-3/2-min.png',
+                    // img here
+                    './assets/Local-3/3-min.png',
+                    // img here
+                    './assets/Local-3/4-and-cover-min.png',
+                    // img here
+                    './assets/Local-3/5-min.png',
+                    // img here
+                    './assets/Local-3/6-min.png',
+                    // img here
+                    './assets/Local-3/7-min.png',
+                    // img here
+                ]
+            },
+            {
+                id: 'project5',
+                name: 'I. MIND READING',
+                // img here
+                imageUrl: './assets/Military-1/4-and-cover-min.png',
+                pageUrl: 'https://www.example.com/project5', // Example URL
+                description: 'Around sixty boys some only eleven were locked in a tiny 4x5 meter cell after refusing to join the army. Stripped naked, starved, beaten for crying, and left to sleep among rats and filth, they endured days of humiliation and terror. Some fell sick and died inside that cramped room, their childhoods erased in a space that turned fear, hunger, and grief into a daily sentence of survival. <br> Mind-Reading Arena visualizes the psychological torture inflicted on boys forced to choose between coerced loyalty and brutal punishment. This is not simply a holding cell but an abstracted, mechanical theatre of surveillance and psychic extraction; broadcast for the entertainment of the powerful. <br> At the center of the drawing, a luminous blue sphere hovers; a cold mind-reading core that suspends children like marionettes. Mechanical tentacles descend from it, gripping each captive by the head, probing their thoughts and memories. These harvested thoughts are projected outward onto floating screens that orbit the arena; like twisted thought bubbles turned public spectacle. <br> Below the sphere, a circular stage holds the limp bodies, the children dangling above it, neither alive nor free. The stage is connected to a second platform by a thick pipeline system; the pipeline acts like a mechanical digestive tract: boys who choose to resist are dropped through these tubes, carried away to torture chambers hidden within the architecture. <br> In the narrative drawing, box-like volumes fragment the space; these recall the original crowded room where more than sixty boys were stripped of clothing, dignity, and identity.',
+                additionalImages: [
+                    [
+                    './assets/Military-1/with-text-2-min.png',
+                    // img here
+                    './assets/Military-1/with-text-min.png',
+                    ],
+                    // img here
+                    './assets/Military-1/1-min.png',
+                    // img here
+                    './assets/Military-1/2-min.png',
+                    // img here
+                    './assets/Military-1/3-min.png',
+                    // img here
+                    './assets/Military-1/4-and-cover-min.png',
+                    // img here
+                    './assets/Military-1/5-min.png',
+                    // img here
+                    './assets/Military-1/6-min.png',
+                    // img here
+                    './assets/Military-1/7-min.png',
+                    // img here
+                ]
+            },
+            {
+                id: 'project6',
+                name: 'II. PARANOIA',
+                // img here
+                imageUrl: './assets/military-2/4 and cover.png',
+                pageUrl: 'https://www.example.com/project6', // Example URL
+                description: 'In Myanmar, undercover “soldier-spies” known as Watermelons pose as loyal soldiers while secretly leaking military secrets to the pro-democracy resistance. Their information helps rebels launch ambushes, reclaim territory, and push the once-mighty army back to its weakest point in decades. Many of these spies turned against the junta out of rage at its brutality toward civilians. But living this double life traps them in constant paranoia—hunted by the regime they betrayed and always at risk of being caught in the rebels’ own crossfire. <br> The Paranoia Maze reimagines the fractured mind of a soldier who betrays his own military from within—a Watermelon spy. Once he escapes, he is hunted by both sides, yet his greatest prison is not out there but in his mind. <br> This entire maze becomes an architectural embodiment of that spiraling fear. The entrance begins with engraved stairs and twisting chips. A fractured labyrinth unfolds: warped rooms that spin around him, burning cubes that erupt without warning, hidden blades that slash from the walls, and mirrors that reflect countless fractured versions of himself, each whispering: “Who do you trust now?” <br> Looming towers pierce the ceiling; Spectator Towers where he imagines unseen eyes mocking him. Steel pipe grids block every exit, forcing him to choose blind paths that might lead to freedom—or back to the start. The final exit is no release at all, just another loop. <br> Threaded through it all, mechanical tentacles and ropes snake through walls, floors, and ceilings; the hidden nervous system of the architecture. They stitch every twisting stair, burning cube, blade, and tower together, ensuring that no matter how far he runs, paranoia will follow; a shadow he can never outrun.',
+                additionalImages: [
+                    [
+                        './assets/military-2/with-text-1.png',
+                        './assets/military-2/with-text.png',
+                    ],
+                    './assets/military-2/1.png',
+                    './assets/military-2/2.png',
+                    './assets/military-2/3.png',
+                    './assets/military-2/4 and cover.png',
+                    './assets/military-2/5.png',
+                    './assets/military-2/6.png',
+                    './assets/military-2/7.png',
+                ]
+            },
+            {
+                id: 'project7',
+                name: 'III. MAD SCIENTIST',
+                // img here
+                imageUrl: './assets/Military-3/4-and-cover.png',
+                pageUrl: 'https://www.example.com/project7', // Example URL
+                description: 'Two young soldiers confessed they helped carry out a brutal order: “Kill all you see.” They joined Myanmar’s military as it torched Rohingya villages, shot men, women, and children, raped women, and buried the dead in mass graves. Entire communities were wiped from the map. Their flat, emotionless testimonies reveal how systematic the slaughter was; not an accident but an extermination. While the soldiers’ confessions now stand as the first to break the silence around Myanmar’s genocide. <br> Each morning, the soldier wakes up and enters his lab; but the “lab” is not a hidden bunker underground: it is the very land he and his battalion patrol. Villages become test sites. Homes become operating tables. Families become living specimens. <br> In his monstrous mind, he sees the villages not as places with lives and histories, but as rows of human tubes, each containing a trapped victim to be dissected, burned, or raped; just another day’s experiment. <br> The Anatomical Lab is an architectural horror built from human bones; bridges of ribcages and femurs span the site like arteries of mass slaughter. Sub-bridges lead to transparent tubes where living victims hang like harvested memories. Mechanical tentacles and ropes writhe through the bone structure, igniting violence and binding every chamber together. Fragments of broken machines and charred bodies pulse with an eerie electric orange and purple glow; a grotesque circulatory system that keeps the soldier’s mechanized cruelty alive.',
+                additionalImages: [
+                    // img here
+                    [
+                        './assets/Military-3/with-text-1.png',
+                        './assets/Military-3/with-text.png',
+                    ],
+                    './assets/Military-3/1.png',
+                    './assets/Military-3/2.png',
+                    './assets/Military-3/3.png',
+                    './assets/Military-3/4-and-cover.png',
+                    './assets/Military-3/5.png',
+                    './assets/Military-3/6.png',
+                    './assets/Military-3/7.png',
+                ]
+            },
+            {
+                id: 'project8',
+                name: 'Comic Book',
+                imageUrl: './assets/comic-book/cover.jpg',
+                // PASTE YOUR PUBLICLY VIEWABLE GOOGLE DRIVE LINK HERE:
+                pdfUrl: 'https://drive.google.com/file/d/1jgWSo0MUfRA90aC36EXjKree1adZezUj/view?usp=sharing',
+                description: 'This project will feature your PDF document, displayed directly within the museum overlay. If it cannot be embedded, a direct download link will be provided.',
+                additionalImages: []
+            }
+        ];
+        
+
+
+
+        let projectMeshes = [];
+        let currentlyFullScreenMesh = null; // This will store the 3D mesh that triggered the overlay
+        const originalPositions = new Map(); // Store original positions/scales
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        const loadingManager = new THREE.LoadingManager();
+        const textureLoader = new THREE.TextureLoader(loadingManager);
+        let texturesLoaded = 0;
+        let totalTexturesToLoad = projectData.length + 1; // Door texture + all project base images
+
+        // Get HTML elements for the project detail overlay
+        const projectDetailOverlay = document.getElementById('project-detail-overlay');
+        const overlayCloseButton = document.getElementById('overlay-close-button');
+        const projectDetailTitle = document.getElementById('project-detail-title');
+        const standardProjectDetails = document.getElementById('standard-project-details'); // This div contains standard image/description
+        const projectDetailMainImage = document.getElementById('project-detail-main-image');
+        const projectDetailDescription = document.getElementById('project-detail-description');
+        const projectDetailAdditionalImages = document.getElementById('project-detail-additional-images');
+        const projectDetailLink = document.getElementById('project-detail-link'); // Get the new link element
+
+        // PDF Viewer elements (now using iframe)
+        const pdfViewerContainer = document.getElementById('pdf-viewer-container');
+        // pdfLoadingMessage will be retrieved dynamically inside showProjectDetails as it's recreated
+
+        // Hallway dimensions (no longer used for walls, but for project distribution)
+        const hallwayRadius = 30; // Increased radius for more space between projects
+        const hallwayHeight = 10; // Used for door height
+
+        // --- Utility Functions ---
+
+        /**
+         * Displays a custom message box instead of alert().
+         * @param {string} message The message to display.
+         */
+        function showMessageBox(message) {
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            messageText.textContent = message;
+            messageBox.style.display = 'block';
+            document.getElementById('message-ok-button').onclick = () => {
+                messageBox.style.display = 'none';
+            };
+        }
+
+        /**
+         * Increments the loaded textures count and hides loading overlay when all are loaded.
+         */
+        function checkAllTexturesLoaded() {
+            texturesLoaded++;
+            console.log(`Textures loaded: ${texturesLoaded}/${totalTexturesToLoad}`);
+            if (texturesLoaded >= totalTexturesToLoad) {
+                document.getElementById('loading-overlay').style.display = 'none';
+                console.log("All textures loaded. Loading overlay hidden.");
+            }
+        }
+
+        // --- Three.js Setup ---
+
+        /**
+         * Initializes the Three.js scene, camera, and renderer.
+         */
+        function init() {
+            console.log("Initializing Three.js scene...");
+            // Scene
+            scene = new THREE.Scene();
+            // Setting background to a dark color to simulate space/darkness
+            scene.background = new THREE.Color(0x050505);
+            scene.fog = new THREE.Fog(0x050505, 10, 50); // Add fog for realism
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            // Start camera outside the area where projects will be, looking towards the door
+            camera.position.set(0, 0, -hallwayRadius - 10);
+            camera.lookAt(new THREE.Vector3(0, 0, -hallwayRadius + 0.1)); // Look at the door
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            console.log("Renderer appended to body.");
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0x00ffff, 1, 100); // Cyan light
+            pointLight.position.set(0, 5, 0);
+            scene.add(pointLight);
+
+            const pointLight2 = new THREE.PointLight(0xff00ff, 1, 100); // Magenta light
+            pointLight2.position.set(0, -5, 0);
+            scene.add(pointLight2);
+
+            // New: Small, soft light from upside
+            const softTopLight = new THREE.PointLight(0xffffff, 1.5, 20); // Increased intensity to 1.5
+            softTopLight.position.set(0, 10, 0); // Positioned directly above the center
+            scene.add(softTopLight);
+
+
+            // --- No Hallway Walls, Floor, or Ceiling Meshes ---
+            // These elements are now removed to create an open space.
+
+            // Create the entrance door
+            createDoor();
+
+            // Load textures and create project meshes
+            loadProjectTextures();
+
+            // Event Listeners
+            window.addEventListener('resize', onWindowResize, false);
+            // Mouse control is initially disabled, enabled after entering the museum
+            renderer.domElement.addEventListener('click', onClick, false); // Keep for mouse clicks
+            overlayCloseButton.addEventListener('click', hideProjectDetails, false); // Add listener for overlay close button
+
+            // Add touch event listeners for mobile interaction
+            renderer.domElement.addEventListener('touchstart', onTouchStart, false);
+            renderer.domElement.addEventListener('touchmove', onTouchMove, false);
+            renderer.domElement.addEventListener('touchend', onTouchEnd, false);
+
+            // Start animation loop
+            animate();
+
+            // Add a timeout to hide the loading overlay as a failsafe
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay.style.display !== 'none') {
+                    loadingOverlay.style.display = 'none';
+                    showMessageBox("Loading took longer than expected. If content isn't fully visible, check your browser's console for network errors.");
+                }
+            }, 15000); // Hide after 15 seconds if still visible
+        }
+
+        /**
+         * Creates the interactive entrance door.
+         */
+        function createDoor() {
+            const doorWidth = 8;
+            const doorHeight = 8;
+            const doorDepth = 0.2;
+
+            const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorDepth);
+            // img here
+            textureLoader.load('https://placehold.co/800x800/444444/FFFFFF',
+                (doorTexture) => {
+                    // Changed to MeshLambertMaterial to react to lights
+                    const doorMaterial = new THREE.MeshLambertMaterial({ map: doorTexture, side: THREE.DoubleSide });
+                    doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
+                    // Position the door in front of the origin, where the projects will be
+                    doorMesh.position.set(0, 0, -hallwayRadius + 0.1);
+                    doorMesh.userData = { isDoor: true, name: 'Entrance Door' };
+                    scene.add(doorMesh);
+                    checkAllTexturesLoaded();
+                    console.log('Door texture loaded successfully.');
+                }, undefined, (error) => {
+                    console.error('Error loading door texture from URL: https://placehold.co/800x800/444444/FFFFFF', error);
+                    checkAllTexturesLoaded(); // IMPORTANT: Still increment on error
+                }
+            );
+        }
+
+        /**
+         * Loads project textures and creates corresponding meshes with text overlay.
+         */
+        function loadProjectTextures() {
+            const numProjects = projectData.length;
+            const angleIncrement = (Math.PI * 2) / numProjects; // Distribute evenly around the circle
+            const baseDistance = hallwayRadius - 5; // Base distance from the center for projects
+
+            projectData.forEach((project, index) => {
+                // Use a standard Image() object to load the image first
+                const img = new Image();
+                img.crossOrigin = 'anonymous'; // Important for loading images from other domains onto canvas
+                img.src = project.imageUrl;
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+
+                    // Set canvas dimensions to match the image
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    // Draw the image onto the canvas
+                    context.drawImage(img, 0, 0);
+
+                    // Add text overlay
+                    context.fillStyle = 'white'; // Text color
+                    context.shadowColor = 'black'; // Text shadow for better readability
+                    context.shadowBlur = 8; // Slightly increased blur for softer shadow
+                    context.shadowOffsetX = 3;
+                    context.shadowOffsetY = 3;
+
+                    // Determine font size based on image height for responsiveness
+                    const fontSize = Math.max(30, canvas.height * 0.08); // Min 30px, up to 8% of image height
+                    context.font = `bold ${fontSize}px Inter, Arial, sans-serif`;
+                    context.textAlign = 'center';
+
+                    // Split name by <br> for multi-line support
+                    const lines = project.name.split('<br>');
+                    const lineHeight = fontSize * 1.2; // 1.2 times font size for line spacing
+
+                    // Calculate total text height and max text width for background
+                    let maxTextWidth = 0;
+                    lines.forEach(line => {
+                        const textWidth = context.measureText(line.trim()).width;
+                        if (textWidth > maxTextWidth) {
+                            maxTextWidth = textWidth;
+                        }
+                    });
+
+                    // Increased padding
+                    const backgroundPaddingX = 40; // Horizontal padding for background
+                    const backgroundPaddingY = 30; // Vertical padding for background
+                    const backgroundHeight = lines.length * lineHeight + backgroundPaddingY * 2;
+                    const backgroundWidth = maxTextWidth + backgroundPaddingX * 2;
+
+                    // Calculate background position to be at the top center
+                    const backgroundX = (canvas.width - backgroundWidth) / 2;
+                    const backgroundY = 0; // Start from the very top
+
+                    // Draw semi-transparent background rectangle for text with rounded corners
+                    const radius = 15; // Corner radius
+                    context.fillStyle = 'rgba(0, 0, 0, 0.65)'; // Slightly more opaque black
+                    context.beginPath();
+                    context.moveTo(backgroundX + radius, backgroundY);
+                    context.lineTo(backgroundX + backgroundWidth - radius, backgroundY);
+                    context.arcTo(backgroundX + backgroundWidth, backgroundY, backgroundX + backgroundWidth, backgroundY + radius, radius);
+                    context.lineTo(backgroundX + backgroundWidth, backgroundY + backgroundHeight - radius);
+                    context.arcTo(backgroundX + backgroundWidth, backgroundY + backgroundHeight, backgroundX + backgroundWidth - radius, backgroundY + backgroundHeight, radius);
+                    context.lineTo(backgroundX + radius, backgroundY + backgroundHeight);
+                    context.arcTo(backgroundX, backgroundY + backgroundHeight, backgroundX, backgroundY + backgroundHeight - radius, radius);
+                    context.lineTo(backgroundX, backgroundY + radius);
+                    context.arcTo(backgroundX, backgroundY, backgroundX + radius, backgroundY, radius);
+                    context.closePath();
+                    context.fill();
+
+
+                    // Draw lines from top down, centered within the background
+                    context.fillStyle = 'white'; // Reset fillStyle for text
+                    let currentTextY = backgroundY + backgroundPaddingY + fontSize; // Start text within padding
+                    for (let i = 0; i < lines.length; i++) {
+                        context.fillText(lines[i].trim(), canvas.width / 2, currentTextY);
+                        currentTextY += lineHeight;
+                    }
+
+
+                    // Create Three.js texture from the canvas
+                    const texture = new THREE.CanvasTexture(canvas);
+                    texture.needsUpdate = true; // Tell Three.js to update the texture
+
+                    const aspectRatio = canvas.width / canvas.height;
+                    const planeHeight = 6; // Increased height for bigger images
+                    const planeWidth = planeHeight * aspectRatio;
+
+                    const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+                    const material = new THREE.MeshLambertMaterial({ map: texture, side: THREE.DoubleSide });
+                    const mesh = new THREE.Mesh(geometry, material);
+
+                    // Introduce randomness for "hanged" effect
+                    const randomYOffset = (Math.random() - 0.5) * 2; // -1 to 1
+                    const randomXRotation = (Math.random() - 0.5) * 0.1; // -0.05 to 0.05 radians
+                    const randomZRotation = (Math.random() - 0.5) * 0.1; // -0.05 to 0.05 radians
+                    // Increased range for depth variation
+                    const randomDistanceOffset = (Math.random() - 0.5) * 5; // -2.5 to 2.5 units
+
+                    // Position projects around the center in a circle with random distance offset
+                    const currentDistance = baseDistance + randomDistanceOffset;
+                    const angle = index * angleIncrement;
+                    mesh.position.x = currentDistance * Math.sin(angle);
+                    mesh.position.z = currentDistance * Math.cos(angle);
+                    mesh.position.y = randomYOffset; // Apply random vertical offset
+
+                    // Correctly orient the plane to face the center of the circle
+                    mesh.rotation.y = angle + Math.PI; // Base rotation to face inwards
+                    mesh.rotation.x += randomXRotation; // Apply random X rotation (tilt)
+                    mesh.rotation.z += randomZRotation; // Apply random Z rotation (lean)
+
+                    mesh.userData = {
+                        id: project.id,
+                        name: project.name,
+                        pageUrl: project.pageUrl,
+                        description: project.description,
+                        additionalImages: project.additionalImages,
+                        imageUrl: project.imageUrl, // Store imageUrl in userData
+                        pdfUrl: project.pdfUrl, // Store pdfUrl in userData
+                        originalPosition: mesh.position.clone(),
+                        originalRotation: mesh.rotation.clone(), // Capture rotation AFTER it's set
+                        originalScale: mesh.scale.clone()
+                    };
+
+                    scene.add(mesh);
+                    projectMeshes.push(mesh);
+                    checkAllTexturesLoaded(); // Increment for each project texture
+                    console.log(`Combined texture loaded successfully for project ${project.id}: ${project.imageUrl}`);
+                };
+
+                img.onerror = (error) => {
+                    console.error(`Error loading image for project ${project.id} from URL: ${project.imageUrl}`, error);
+                    checkAllTexturesLoaded(); // Still increment to avoid infinite loading
+                    showMessageBox(`Failed to load image for project ${project.name}. Check console for details.`);
+                };
+            });
+        }
+
+        /**
+         * Handles window resize events to update camera aspect ratio and renderer size.
+         */
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- Mouse Interaction ---
+
+        /**
+         * Handles mouse down event to start dragging.
+         * @param {MouseEvent} event
+         */
+        function onMouseDown(event) {
+            isDragging = true;
+            previousMouseX = event.clientX;
+            previousMouseY = event.clientY;
+            renderer.domElement.style.cursor = 'grabbing';
+        }
+
+        /**
+         * Handles mouse move event for camera rotation.
+         * @param {MouseEvent} event
+         */
+        function onMouseMove(event) {
+            if (!isDragging) return;
+
+            const deltaX = event.clientX - previousMouseX;
+            const deltaY = event.clientY - previousMouseY;
+
+            // Update target rotation based on mouse movement
+            cameraTargetRotationY -= deltaX * rotationSpeed;
+            cameraTargetRotationX -= deltaY * rotationSpeed;
+
+            // Clamp vertical rotation to prevent flipping
+            cameraTargetRotationX = Math.max(-maxVerticalRotation, Math.min(maxVerticalRotation, cameraTargetRotationX));
+
+            previousMouseX = event.clientX;
+            previousMouseY = event.clientY;
+        }
+
+        /**
+         * Handles mouse up event to stop dragging.
+         */
+        function onMouseUp() {
+            isDragging = false;
+            renderer.domElement.style.cursor = 'grab';
+        }
+
+        /**
+         * Handles touch start event for mobile dragging.
+         * @param {TouchEvent} event
+         */
+        function onTouchStart(event) {
+            if (event.touches.length === 1) { // Only handle single touch for rotation
+                isDragging = true;
+                previousMouseX = event.touches[0].clientX;
+                previousMouseY = event.touches[0].clientY;
+                initialTouchX = event.touches[0].clientX; // Store initial touch for tap detection
+                initialTouchY = event.touches[0].clientY; // Store initial touch for tap detection
+            }
+            event.preventDefault(); // Prevent default touch behavior (scrolling, zooming)
+        }
+
+        /**
+         * Handles touch move event for mobile camera rotation.
+         * @param {TouchEvent} event
+         */
+        function onTouchMove(event) {
+            if (!isDragging || event.touches.length !== 1) return;
+
+            const deltaX = event.touches[0].clientX - previousMouseX;
+            const deltaY = event.touches[0].clientY - previousMouseY;
+
+            cameraTargetRotationY -= deltaX * rotationSpeed;
+            cameraTargetRotationX -= deltaY * rotationSpeed;
+
+            cameraTargetRotationX = Math.max(-maxVerticalRotation, Math.min(maxVerticalRotation, cameraTargetRotationX));
+
+            previousMouseX = event.touches[0].clientX;
+            previousMouseY = event.touches[0].clientY;
+            event.preventDefault(); // Prevent default touch behavior (scrolling, zooming)
+        }
+
+        /**
+         * Handles touch end event to stop mobile dragging and detect taps.
+         * @param {TouchEvent} event
+         */
+        function onTouchEnd(event) {
+            isDragging = false;
+            // Check if it was a tap (minimal movement)
+            const deltaX = event.changedTouches[0].clientX - initialTouchX;
+            const deltaY = event.changedTouches[0].clientY - initialTouchY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (distance < tapThreshold) {
+                // It was a tap, manually trigger the onClick logic
+                // Pass the touch event's clientX/Y as if it were a mouse event
+                onClick({ clientX: event.changedTouches[0].clientX, clientY: event.changedTouches[0].clientY });
+            }
+        }
+
+
+        /**
+         * Handles click events for project interaction and door entry.
+         * @param {MouseEvent} event
+         */
+        function onClick(event) {
+            // If the project detail overlay is active, clicks on the canvas should be ignored.
+            if (projectDetailOverlay.classList.contains('active')) {
+                return;
+            }
+
+            // Calculate mouse position in normalized device coordinates (-1 to +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Check for intersection with the door first if not entered yet
+            if (!hasEnteredMuseum) {
+                const intersectsDoor = raycaster.intersectObject(doorMesh);
+                if (intersectsDoor.length > 0) {
+                    enterMuseumAnimation();
+                    return; // Stop further processing after door click
+                }
+            }
+
+            // Only allow project clicks if inside the museum
+            if (hasEnteredMuseum) {
+                // Calculate objects intersecting the ray
+                const intersects = raycaster.intersectObjects(projectMeshes);
+
+                if (intersects.length > 0) {
+                    const clickedMesh = intersects[0].object;
+                    showProjectDetails(clickedMesh); // Show the HTML project details overlay
+                }
+            }
+        }
+
+        /**
+         * Animates the camera entering the museum through the door.
+         */
+        function enterMuseumAnimation() {
+            // Animate camera moving into the open space
+            gsap.to(camera.position, {
+                duration: 2,
+                x: 0,
+                y: 0,
+                z: 0, // Target position at the center of the open space
+                ease: "power2.inOut",
+                onComplete: () => {
+                    hasEnteredMuseum = true;
+                    // Remove the door after entering
+                    if (doorMesh) {
+                        scene.remove(doorMesh);
+                        doorMesh.geometry.dispose();
+                        doorMesh.material.dispose();
+                        doorMesh = null;
+                    }
+                    // Crucial: Explicitly set camera rotation to a neutral state after animation.
+                    // This prevents any inherited or interpolated flips.
+                    camera.rotation.set(0, 0, 0); // Reset pitch and roll, face positive Z
+                    cameraTargetRotationY = 0; // Reset target for mouse controls to match current camera rotation
+                    cameraTargetRotationX = 0;
+
+                    // Enable mouse controls for looking around
+                    renderer.domElement.addEventListener('mousedown', onMouseDown, false);
+                    renderer.domElement.addEventListener('mousemove', onMouseMove, false);
+                    renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+                    renderer.domElement.style.cursor = 'grab'; // Set initial cursor
+
+                    // Labels are now part of the texture, no separate HTML labels to show/hide
+                }
+            });
+
+            // Animate the door (e.g., fade out or rotate open)
+            gsap.to(doorMesh.material, {
+                duration: 1.5,
+                opacity: 0,
+                ease: "power2.inOut",
+                onStart: () => {
+                    doorMesh.material.transparent = true; // Enable transparency for fade out
+                }
+            });
+            // Optional: Animate door rotation
+            gsap.to(doorMesh.rotation, {
+                duration: 1.5,
+                y: Math.PI / 2, // Rotate 90 degrees
+                ease: "power2.inOut"
+            });
+        }
+
+
+        /**
+         * Populates and displays the HTML project detail overlay with camera zoom animation.
+         * @param {THREE.Mesh} mesh The 3D mesh corresponding to the clicked project.
+         */
+        function showProjectDetails(mesh) {
+            currentlyFullScreenMesh = mesh; // Store the 3D mesh that was clicked
+
+            // Disable 3D camera rotation immediately
+            renderer.domElement.removeEventListener('mousedown', onMouseDown);
+            renderer.domElement.removeEventListener('mousemove', onMouseMove);
+            renderer.domElement.removeEventListener('mouseup', onMouseUp);
+            renderer.domElement.style.cursor = 'default';
+
+            // Get mesh world position
+            const meshWorldPosition = new THREE.Vector3();
+            mesh.getWorldPosition(meshWorldPosition);
+
+            // Get mesh world dimensions (for a plane, these are its width/height scaled by its world scale)
+            // Assuming the plane geometry's width and height are its local X and Y dimensions
+            const meshWidth = mesh.geometry.parameters.width * mesh.scale.x;
+            const meshHeight = mesh.geometry.parameters.height * mesh.scale.y;
+
+            // Calculate distance needed based on camera FOV and aspect ratio
+            const fovRad = THREE.MathUtils.degToRad(camera.fov);
+            const aspect = camera.aspect;
+
+            // Distance to fit horizontally (width)
+            const distanceForWidth = (meshWidth / 2) / Math.tan(fovRad / 2 / aspect);
+            // Distance to fit vertically (height)
+            const distanceForHeight = (meshHeight / 2) / Math.tan(fovRad / 2);
+
+            // Use the larger distance to ensure both dimensions fit, plus some padding
+            const targetDistance = Math.max(distanceForWidth, distanceForHeight) + 2; // Add 2 units of padding
+
+            // Calculate target camera position: move back from the mesh along its world Z-axis
+            const meshWorldDirection = new THREE.Vector3();
+            mesh.getWorldDirection(meshWorldDirection); // Get the mesh's forward direction in world space
+            const targetCameraPosition = new THREE.Vector3().copy(meshWorldPosition).add(meshWorldDirection.multiplyScalar(targetDistance * -1));
+
+            // Calculate target camera rotation: directly look at the mesh's world position
+            const tempCamera = new THREE.Camera(); // Use a temporary camera to calculate lookAt rotation
+            tempCamera.position.copy(targetCameraPosition);
+            tempCamera.lookAt(meshWorldPosition);
+            const targetCameraRotation = tempCamera.rotation.clone(); // Clone the calculated rotation
+
+            // Clear previous content and hide all sections initially
+            projectDetailTitle.innerHTML = '';
+            standardProjectDetails.classList.add('hidden'); // Hide standard content
+            pdfViewerContainer.classList.add('hidden'); // Hide PDF viewer content
+
+            // Reset PDF viewer container content for fresh load
+            pdfViewerContainer.innerHTML = '<p id="pdf-loading-message">Loading PDF...</p>';
+            let pdfLoadingMessage = document.getElementById('pdf-loading-message'); // Get reference after reset
+
+            // Populate project title
+            projectDetailTitle.innerHTML = mesh.userData.name;
+
+            // Check if it's a PDF project
+            if (mesh.userData.pdfUrl) {
+                console.log("Attempting to show PDF viewer for:", mesh.userData.name, "Original PDF URL:", mesh.userData.pdfUrl);
+                pdfViewerContainer.classList.remove('hidden');
+                standardProjectDetails.classList.add('hidden'); // Ensure standard is hidden
+
+                // Construct the Google Docs Viewer URL with the original PDF URL encoded
+                const googleViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(mesh.userData.pdfUrl)}&embedded=true`;
+                console.log("Google Docs Viewer URL:", googleViewerUrl);
+
+                const iframe = document.createElement('iframe');
+                iframe.id = 'pdf-viewer-iframe';
+                iframe.src = googleViewerUrl;
+                iframe.setAttribute('allowfullscreen', ''); // Allow fullscreen mode for PDF viewer
+                iframe.style.display = 'none'; // Hide iframe initially until loaded
+                pdfViewerContainer.appendChild(iframe);
+
+                let loadTimeout = setTimeout(() => {
+                    console.warn("PDF iframe loading timed out. Displaying fallback.");
+                    if (pdfLoadingMessage) {
+                        pdfLoadingMessage.textContent = 'PDF could not be embedded. Please use the direct link below.';
+                    }
+                    // Show fallback download link
+                    const fallbackLink = document.createElement('a');
+                    fallbackLink.href = mesh.userData.pdfUrl; // Direct link to the PDF
+                    fallbackLink.textContent = 'Open PDF Directly';
+                    fallbackLink.target = '_blank'; // Open in new tab
+                    const fallbackContainer = document.createElement('div');
+                    fallbackContainer.id = 'pdf-fallback-container';
+                    // Move the message into fallback container if it still exists
+                    if (pdfLoadingMessage && pdfLoadingMessage.parentNode === pdfViewerContainer) {
+                         fallbackContainer.appendChild(pdfLoadingMessage);
+                    } else {
+                        // Recreate if it was removed
+                        pdfLoadingMessage = document.createElement('p');
+                        pdfLoadingMessage.id = 'pdf-loading-message';
+                        pdfLoadingMessage.textContent = 'PDF could not be embedded. Please use the direct link below.';
+                        fallbackContainer.appendChild(pdfLoadingMessage);
+                    }
+                    fallbackContainer.appendChild(fallbackLink);
+                    pdfViewerContainer.appendChild(fallbackContainer);
+                    iframe.remove(); // Remove the problematic iframe
+                }, 10000); // 10 seconds timeout
+
+                iframe.onload = () => {
+                    clearTimeout(loadTimeout); // Clear the timeout if loaded successfully
+                    if (pdfLoadingMessage) {
+                        pdfLoadingMessage.style.display = 'none';
+                    }
+                    iframe.style.display = 'block'; // Show iframe
+                    console.log("PDF iframe loaded successfully.");
+                };
+                iframe.onerror = () => {
+                    clearTimeout(loadTimeout); // Clear timeout on error
+                    if (pdfLoadingMessage) {
+                        pdfLoadingMessage.textContent = 'Failed to load PDF. Check URL or network.';
+                    }
+                    console.error("Error loading PDF iframe.");
+                    showMessageBox('Failed to load PDF. Please check the URL and console for errors.');
+                    // Also show fallback on immediate error
+                    const fallbackLink = document.createElement('a');
+                    fallbackLink.href = mesh.userData.pdfUrl; // Direct link to the PDF
+                    fallbackLink.textContent = 'Open PDF Directly';
+                    fallbackLink.target = '_blank'; // Open in new tab
+                    const fallbackContainer = document.createElement('div');
+                    fallbackContainer.id = 'pdf-fallback-container';
+                    if (pdfLoadingMessage && pdfLoadingMessage.parentNode === pdfViewerContainer) {
+                         fallbackContainer.appendChild(pdfLoadingMessage);
+                    } else {
+                        pdfLoadingMessage = document.createElement('p');
+                        pdfLoadingMessage.id = 'pdf-loading-message';
+                        pdfLoadingMessage.textContent = 'Failed to load PDF. Check URL or network.';
+                        fallbackContainer.appendChild(pdfLoadingMessage);
+                    }
+                    fallbackContainer.appendChild(fallbackLink);
+                    pdfViewerContainer.appendChild(fallbackContainer);
+                    iframe.remove();
+                };
+
+            } else {
+                console.log("Showing standard project details for:", mesh.userData.name);
+                standardProjectDetails.classList.remove('hidden'); // Ensure standard is visible
+                pdfViewerContainer.classList.add('hidden'); // Ensure PDF viewer is hidden
+
+                projectDetailMainImage.src = mesh.userData.imageUrl;
+                projectDetailDescription.innerHTML = `<p>${mesh.userData.description}</p>`;
+
+                // Clear and populate additional images
+                projectDetailAdditionalImages.innerHTML = '';
+                if (mesh.userData.additionalImages && mesh.userData.additionalImages.length > 0) {
+                    mesh.userData.additionalImages.forEach(item => {
+                        if (Array.isArray(item)) {
+                            const rowDiv = document.createElement('div');
+                            rowDiv.className = 'image-group-row';
+                            item.forEach(imgUrl => {
+                                const img = document.createElement('img');
+                                img.src = imgUrl;
+                                img.alt = 'Additional Project Image';
+                                rowDiv.appendChild(img);
+                            });
+                            projectDetailAdditionalImages.appendChild(rowDiv);
+                        } else {
+                            const img = document.createElement('img');
+                            img.src = item;
+                            img.alt = 'Additional Project Image';
+                            img.className = 'full-width-image';
+                            projectDetailAdditionalImages.appendChild(img);
+                        }
+                    });
+                }
+
+                // Populate the project link
+                if (projectDetailLink) {
+                    projectDetailLink.href = mesh.userData.pageUrl || '#';
+                    projectDetailLink.textContent = `Click here to learn more`;
+                }
+            }
+
+            // Animate both camera position and rotation
+            gsap.to(camera.position, {
+                duration: 1,
+                x: targetCameraPosition.x,
+                y: targetCameraPosition.y,
+                z: targetCameraPosition.z,
+                ease: "power2.inOut",
+                onUpdate: () => {
+                    // Make camera look at the mesh during animation
+                    camera.lookAt(meshWorldPosition); // Look at the mesh's world position
+                },
+                onComplete: () => {
+                    // Once camera animation is complete, hide the 3D mesh and show HTML overlay
+                    mesh.visible = false; // Hide the 3D mesh
+                    renderer.domElement.style.opacity = '0.3'; // Dim the 3D scene
+
+                    // Reset scroll position to top
+                    projectDetailOverlay.scrollTop = 0;
+
+                    // Show the overlay with animation
+                    projectDetailOverlay.classList.add('active');
+                }
+            });
+
+            gsap.to(camera.rotation, {
+                duration: 1,
+                x: targetCameraRotation.x,
+                y: targetCameraRotation.y,
+                z: targetCameraRotation.z,
+                ease: "power2.inOut"
+            });
+        }
+
+        /**
+         * Hides the HTML project detail overlay and returns to the museum view.
+         */
+        function hideProjectDetails() {
+            console.log("Hiding project details overlay.");
+            // Hide the overlay with animation
+            projectDetailOverlay.classList.remove('active');
+
+            // Clear PDF viewer content and reset loading message
+            pdfViewerContainer.classList.add('hidden');
+            // Reset the inner HTML to ensure the loading message is present for the next PDF load
+            pdfViewerContainer.innerHTML = '<p id="pdf-loading-message">Loading PDF...</p>';
+
+            // Animate camera back to the center of the room (0,0,0)
+            gsap.to(camera.position, {
+                duration: 1,
+                x: 0,
+                y: 0,
+                z: 0,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    // Restore 3D scene opacity
+                    renderer.domElement.style.opacity = '1';
+
+                    // Restore the 3D mesh that was "full-screened"
+                    if (currentlyFullScreenMesh) {
+                        currentlyFullScreenMesh.visible = true; // Make it visible again
+                        // Ensure it's back to its original position/rotation/scale if any temporary changes were made
+                        currentlyFullScreenMesh.position.copy(currentlyFullScreenMesh.userData.originalPosition);
+                        currentlyFullScreenMesh.rotation.copy(currentlyFullScreenMesh.userData.originalRotation);
+                        currentlyFullScreenMesh.scale.copy(currentlyFullScreenMesh.userData.originalScale);
+                    }
+
+                    // Reset camera rotation to a neutral state for general viewing
+                    camera.rotation.set(0, 0, 0);
+                    cameraTargetRotationY = 0;
+                    cameraTargetRotationX = 0;
+
+                    // Re-enable 3D camera rotation
+                    renderer.domElement.addEventListener('mousedown', onMouseDown, false);
+                    renderer.domElement.addEventListener('mousemove', onMouseMove, false);
+                    renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+                    renderer.domElement.style.cursor = 'grab';
+
+                    currentlyFullScreenMesh = null; // Clear the reference
+                }
+            });
+
+            // Animate camera rotation back to a neutral state
+            gsap.to(camera.rotation, {
+                duration: 1,
+                x: 0,
+                y: 0,
+                z: 0,
+                ease: "power2.inOut"
+            });
+        }
+
+        // --- Animation Loop ---
+
+        /**
+         * Main animation loop for rendering the scene and updating camera rotation.
+         */
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Smoothly interpolate camera rotation towards target rotation only if inside museum and not full screen
+            // and if the overlay is not active (i.e., 3D controls are enabled)
+            if (hasEnteredMuseum && !projectDetailOverlay.classList.contains('active')) {
+                camera.rotation.y += (cameraTargetRotationY - camera.rotation.y) * 0.1;
+                camera.rotation.x += (cameraTargetRotationX - camera.rotation.x) * 0.1;
+                // No need to update 2D labels as they are drawn on textures
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // --- Initialize on Window Load ---
+        window.onload = function () {
+            init();
+        };
+    </script>
+</body>
+</html>
