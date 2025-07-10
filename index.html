@@ -245,7 +245,7 @@
         <button id="overlay-close-button">&times;</button>
         <div id="project-detail-content">
             <!-- Hero Image Section -->
-            <img id="project-detail-main-image" src="" alt="Project Main Image">
+            <img id="project-detail-main-image" src="" alt="Project Main Image" loading="lazy">
 
             <!-- Scrollable Content Body -->
             <div id="project-content-body">
@@ -294,12 +294,12 @@
                 id: 'project1',
                 name: 'UNSPOKEN TALES <br> Emotional Limbo',
                 // img here
-                imageUrl: './assets/Main-story/1-and-main-shot-min.png', // Larger image for hero section
+                imageUrl: './assets/main.png', // Larger image for hero section
                 pageUrl: 'https://cloud.chaos.com/collaboration/n/Phe2N3MhDdvtSqfZ38QoAh', // Example URL
                 description: 'This project, rooted in Constructivist Grounded Theory and existential phenomenology, explores how architectural spaces embody emotion, story, and memory, particularly within the context of Myanmar’s civil conflict. <br> Through in-depth interviews with eleven survivors, personal testimonies are transformed into spatial narratives. <br> The core inquiry revolves around visually communicating these survivor stories, interpreting the interplay of narrative, space, and emotion, and ultimately turning spaces into stories through visual communication. <br> Drawings inspired from influential architects and theorists, used by exaggerated geometry, strong linework, and color to visually express powerful emotions like dread, despair, and resistance. <br> As each becomes an immersive, fictitious world, turning personal narratives into spatial acts that challenge viewers’ perceptions and ethics. <br> Ultimately, it is about creating emotional realities through drawing and architecture, using Myanmar as a poignant case study to confront silence and normalized cruelty. <br> However, this project does not seek to produce a buildable structure, but rather to explore architecture as a medium for expressing psychological rupture. Through drawings, trauma is translated into spatial language using architectural fragments as emotional metaphors. As it is rooted in introspection and memory deconstruction, as it maps real wartime experiences in Myanmar not as literal scenes, but as emotional landscapes.',
                 additionalImages: [
                     // img here
-                    './assets/Main-story/1-and-main-shot-min.png',
+                    './assets/main.png',
                     // img here
                     './assets/Main-story/2-min.png',
                     // img here
@@ -687,7 +687,7 @@
 
             const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorDepth);
             // img here
-            textureLoader.load('./assets/Main-story/1-and-main-shot-min.png',
+            textureLoader.load('./assets/main.png',
                 (doorTexture) => {
                     // Changed to MeshLambertMaterial to react to lights
                     const doorMaterial = new THREE.MeshLambertMaterial({ map: doorTexture, side: THREE.DoubleSide });
